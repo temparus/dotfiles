@@ -1,0 +1,60 @@
+! Dracula Xresources palette
+*.foreground: #F8F8F2
+*.background: #282A36
+*.color0:     #000000
+*.color8:     #4D4D4D
+*.color1:     #FF5555
+*.color9:     #FF6E67
+*.color2:     #50FA7B
+*.color10:    #5AF78E
+*.color3:     #F1FA8C
+*.color11:    #F4F99D
+*.color4:     #BD93F9
+*.color12:    #CAA9FA
+*.color5:     #FF79C6
+*.color13:    #FF92D0
+*.color6:     #8BE9FD
+*.color14:    #9AEDFE
+*.color7:     #BFBFBF
+*.color15:    #E6E6E6
+
+
+!
+! scrollbar
+!
+! enable scrollbar
+URxvt*scrollBar:          true
+! scrollbar width
+URxvt*thickness:          5
+! scrollbar color
+URxvt*scrollColor:        #1E1E1E
+! scrollbar trough area color
+!URxvt*troughColor:        #333333
+! scrollbar without a trough
+!URxvt*scrollBar_floating: false
+! scrollbar to the right
+URxvt*scrollBar_right:    true
+! scrollbar style
+URxvt*scrollstyle:        plain
+
+
+! Xft settings ---------------------------------------------------------
+Xft.autohint:   0
+Xft.dpi:        96
+Xft.antialias:  true
+Xft.rgba:       rgb
+Xft.hinting:    true
+Xft.hintstyle:  hintslight
+Xft.lcdfilter:  lcddefault
+
+!
+! fonts
+!
+! xft fonts
+!URxvt*font: xft:DejaVu Sans Mono for Powerline:size=11
+URxvt*font: xft:Hack:size=14
+!URxvt*boldFont: xft:DejaVu Sans Mono for Powerline:bold:size=11
+URxvt*boldFont: xft:Hack:bold:size=14
+! normal fonts
+!URxvt*font:-*-courier-medium-r-normal-*-14-*-*-*-*-*-iso8859-1
+!URxvt*boldFont:-*-courier-bold-r-normal-*-14-*-*-*-*-*-iso8859-1
