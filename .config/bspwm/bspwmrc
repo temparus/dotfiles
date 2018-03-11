@@ -15,6 +15,7 @@ bspc desktop ^1 -l monocle
 
 bspc rule -a Gimp desktop=^8 state=floating follow=on
 bspc rule -a Chromium desktop=^1
+bspc rule -a vivaldi desktop=^1
 bspc rule -a Atom desktop=^4
 bspc rule -a Genymotion desktop=^3
 bspc rule -a TelegramDesktop desktop=^3
