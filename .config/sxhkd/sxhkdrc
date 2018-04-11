@@ -170,41 +170,23 @@ super + shift + z
 
 ### Mute
 XF86AudioMute
-	pactl set-sink-mute 0 toggle; \
-        pactl set-sink-mute 1 toggle; \
-	pactl set-sink-mute 2 toggle; \
-	pactl set-sink-mute 3 toggle
+	~/.config/audio.sh toggle sinks
 
 XF86AudioMicMute
-        pactl set-source-mute 0 toggle; \
-        pactl set-source-mute 1 toggle; \
-	pactl set-source-mute 2 toggle; \
-	pactl set-source-mute 3 toggle
+	~/.config/audio.sh toggle sources
 
 ### Master Volume
 XF86AudioRaiseVolume
-	if [ $(pactl list sinks | grep '^[[:space:]]Volume:' | head -n $(( 1 )) | tail -n 1 | sed -e 's,.* \([0-9][0-9]*\)%.*,\1,') -lt 200 ]; then pactl set-sink-volume 0 +2%; fi; \
-	if [ $(pactl list sinks | grep '^[[:space:]]Volume:' | head -n $(( 2 )) | tail -n 1 | sed -e 's,.* \([0-9][0-9]*\)%.*,\1,') -lt 200 ]; then pactl set-sink-volume 1 +2%; fi; \
-	if [ $(pactl list sinks | grep '^[[:space:]]Volume:' | head -n $(( 3 )) | tail -n 1 | sed -e 's,.* \([0-9][0-9]*\)%.*,\1,') -lt 200 ]; then pactl set-sink-volume 2 +2%; fi; \
-	if [ $(pactl list sinks | grep '^[[:space:]]Volume:' | head -n $(( 4 )) | tail -n 1 | sed -e 's,.* \([0-9][0-9]*\)%.*,\1,') -lt 200 ]; then pactl set-sink-volume 3 +2%; fi
+	~/.config/audio.sh '+2%'
 
 super + XF86AudioRaiseVolume
-	if [ $(pactl list sinks | grep '^[[:space:]]Volume:' | head -n $(( 1 )) | tail -n 1 | sed -e 's,.* \([0-9][0-9]*\)%.*,\1,') -lt 191 ]; then pactl set-sink-volume 0 +10%; fi; \
-        if [ $(pactl list sinks | grep '^[[:space:]]Volume:' | head -n $(( 2 )) | tail -n 1 | sed -e 's,.* \([0-9][0-9]*\)%.*,\1,') -lt 191 ]; then pactl set-sink-volume 1 +10%; fi; \
-	if [ $(pactl list sinks | grep '^[[:space:]]Volume:' | head -n $(( 3 )) | tail -n 1 | sed -e 's,.* \([0-9][0-9]*\)%.*,\1,') -lt 191 ]; then pactl set-sink-volume 2 +10%; fi; \
-	if [ $(pactl list sinks | grep '^[[:space:]]Volume:' | head -n $(( 4 )) | tail -n 1 | sed -e 's,.* \([0-9][0-9]*\)%.*,\1,') -lt 191 ]; then pactl set-sink-volume 3 +10%; fi
+	~/.config/audio.sh '+10%'
 
 XF86AudioLowerVolume
-	if [ $(pactl list sinks | grep '^[[:space:]]Volume:' | head -n $(( 1 )) | tail -n 1 | sed -e 's,.* \([0-9][0-9]*\)%.*,\1,') -gt 0 ]; then pactl set-sink-volume 0 -2%; fi; \
-        if [ $(pactl list sinks | grep '^[[:space:]]Volume:' | head -n $(( 2 )) | tail -n 1 | sed -e 's,.* \([0-9][0-9]*\)%.*,\1,') -gt 0 ]; then pactl set-sink-volume 1 -2%; fi; \
-	if [ $(pactl list sinks | grep '^[[:space:]]Volume:' | head -n $(( 3 )) | tail -n 1 | sed -e 's,.* \([0-9][0-9]*\)%.*,\1,') -gt 0 ]; then pactl set-sink-volume 2 -2%; fi; \
-	if [ $(pactl list sinks | grep '^[[:space:]]Volume:' | head -n $(( 4 )) | tail -n 1 | sed -e 's,.* \([0-9][0-9]*\)%.*,\1,') -gt 0 ]; then pactl set-sink-volume 3 -2%; fi
+	~/.config/audio.sh '-2%'
 
 super + XF86AudioLowerVolume
-	if [ $(pactl list sinks | grep '^[[:space:]]Volume:' | head -n $(( 1 )) | tail -n 1 | sed -e 's,.* \([0-9][0-9]*\)%.*,\1,') -gt 9 ]; then pactl set-sink-volume 0 -10%; fi; \
-        if [ $(pactl list sinks | grep '^[[:space:]]Volume:' | head -n $(( 2 )) | tail -n 1 | sed -e 's,.* \([0-9][0-9]*\)%.*,\1,') -gt 9 ]; then pactl set-sink-volume 1 -10%; fi; \
-	if [ $(pactl list sinks | grep '^[[:space:]]Volume:' | head -n $(( 3 )) | tail -n 1 | sed -e 's,.* \([0-9][0-9]*\)%.*,\1,') -gt 9 ]; then pactl set-sink-volume 2 -10%; fi; \
-	if [ $(pactl list sinks | grep '^[[:space:]]Volume:' | head -n $(( 4 )) | tail -n 1 | sed -e 's,.* \([0-9][0-9]*\)%.*,\1,') -gt 9 ]; then pactl set-sink-volume 3 -10%; fi
+	~/.config/audio.sh '-10%'
 
 # BRIGHTNESS
 
