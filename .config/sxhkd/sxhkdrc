@@ -170,23 +170,23 @@ super + shift + z
 
 ### Mute
 XF86AudioMute
-	~/.config/audio.sh toggle sinks
+	~/bin/audio.sh toggle sinks
 
 XF86AudioMicMute
-	~/.config/audio.sh toggle sources
+	~/bin/audio.sh toggle sources
 
 ### Master Volume
 XF86AudioRaiseVolume
-	~/.config/audio.sh '+2%'
+	~/bin/audio.sh '+2%'
 
 super + XF86AudioRaiseVolume
-	~/.config/audio.sh '+10%'
+	~/bin/audio.sh '+10%'
 
 XF86AudioLowerVolume
-	~/.config/audio.sh '-2%'
+	~/bin/audio.sh '-2%'
 
 super + XF86AudioLowerVolume
-	~/.config/audio.sh '-10%'
+	~/bin/audio.sh '-10%'
 
 # BRIGHTNESS
 
