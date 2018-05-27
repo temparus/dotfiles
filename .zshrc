@@ -97,4 +97,5 @@ source $ZSH/oh-my-zsh.sh
 eval $(thefuck --alias)
 
 alias system-update='sudo sh /home/slu/bin/upgrade.sh'
+alias kernel-upgrade='sudo sh /home/slu/bin/kernel-upgrade.sh'
 
