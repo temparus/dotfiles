@@ -24,7 +24,7 @@ font-2 = siji:pixelsize=10;0
 
 modules-left = bspwm xwindow
 modules-center = 
-modules-right = wifi battery backlight volume date powermenu
+modules-right = temperature wifi battery backlight volume date powermenu
 
 ;tray-position = right
 ;tray-padding = 2
@@ -68,6 +68,9 @@ label-empty-padding = 4
 type = internal/xwindow
 label = %title:0:120:...%
 label-padding = 4
+
+[module/temperature]
+type = internal/temperature
 
 [module/date]
 type = internal/date
