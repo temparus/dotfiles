@@ -72,6 +72,8 @@ label-padding = 4
 [module/temperature]
 type = internal/temperature
 
+thermal-zone = 1
+
 [module/date]
 type = internal/date
 
@@ -165,7 +167,12 @@ label-connected = %ifname% %essid% connected
 ;label-connected-foreground = #ae81ff
 
 [module/volume]
-type = internal/volume
+type = internal/pulseaudio
+
+;type = internal/volume
+;master-soundcard = default
+;speaker-soundcard = 0
+;headphone-soundcard = 1
 
 format-volume = <ramp-volume>  <label-volume>
 format-muted = <label-muted>

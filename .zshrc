@@ -94,6 +94,8 @@ source $ZSH/oh-my-zsh.sh
 # screenfetch
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
+alias dots='git --git-dir=$HOME/.dots.git/ --work-tree=$HOME'
+
 eval $(thefuck --alias)
 
 alias system-update='sudo sh /home/slu/bin/upgrade.sh'
