@@ -57,6 +57,8 @@ Section "InputClass"
   MatchIsTouchpad "on"
   MatchDevicePath "/dev/input/event*"
   Driver "libinput"
+  Option "Tapping" "on"
+  Option "ClickMethod" "clickfinger"
 EndSection
 ```
 
