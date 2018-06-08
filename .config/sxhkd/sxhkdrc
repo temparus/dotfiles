@@ -166,6 +166,10 @@ super + shift + x
 super + shift + z
 	~/bin/hibernate.sh
 
+# shut down computer
+super + shift + q
+	sudo poweroff
+
 # VOLUME
 
 ### Mute
