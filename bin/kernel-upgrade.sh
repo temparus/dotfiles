@@ -21,9 +21,9 @@ chgrp "${USER}" "/home/${USER}/.config/kernel/${DEVICE_NAME}.config"
 
 cd "/home/${USER}"
 
-#git add -f ".config/kernel/${DEVICE_NAME}.config"
-#git commit --author "${AUTHOR}" -m "[${DEVICE_NAME}] Update kernel config to ${NEW_KV}"
-# git push
+dots add -f ".config/kernel/${DEVICE_NAME}.config"
+dots commit --author "${AUTHOR}" -m "[${DEVICE_NAME}] Update kernel config to ${NEW_KV}"
+dots push
 
 cd /usr/src/linux
 
