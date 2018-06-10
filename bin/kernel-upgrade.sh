@@ -21,6 +21,7 @@ chgrp "${USER}" "/home/${USER}/.config/kernel/${DEVICE_NAME}.config"
 
 cd "/home/${USER}"
 
+alias dots="git --git-dir=/home/${USER}/.dots.git/ --work-tree=/home/${USER}/"
 dots add -f ".config/kernel/${DEVICE_NAME}.config"
 dots commit --author "${AUTHOR}" -m "[${DEVICE_NAME}] Update kernel config to ${NEW_KV}"
 dots push
@@ -30,5 +31,7 @@ cd /usr/src/linux
 make -j5 && make modules_install
 mount /boot
 make install
+# only keep the newest three kernels
+eclean-kernel -n 3
 grub-mkconfig -o /boot/grub/grub.cfg
 
