@@ -101,3 +101,5 @@ eval $(thefuck --alias)
 alias system-update='sudo sh /home/slu/bin/upgrade.sh'
 alias kernel-upgrade='sudo sh /home/slu/bin/kernel-upgrade.sh'
 
+if [[ -z $DISPLAY ]] && [[ $(tty) = /dev/tty1 ]]; then exec startx; fi
+
