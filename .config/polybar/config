@@ -49,18 +49,18 @@ ws-icon-default = 
 
 format = <label-state> <label-mode>
 
-label-focused = %icon%
+label-focused = %icon% %index%
 label-focused-background = #88000000
 label-focused-underline= #ddd
 label-focused-padding = 4
 
-label-occupied = %icon%
+label-occupied = %icon% %index%
 label-occupied-padding = 4
 
-label-urgent = %icon%
+label-urgent = %icon% %index%
 label-urgent-padding = 4
 
-label-empty = %icon%
+label-empty = %icon% %index%
 label-empty-foreground = #44ffffff
 label-empty-padding = 4
 
