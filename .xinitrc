@@ -2,5 +2,6 @@
 
 [[ -f ~/.Xresources ]] && xrdb -merge ~/.Xresources
 
-#exec ck-launch-session dbus-launch cinnamon-session
+export _JAVA_AWT_WM_NONREPARENTING=1
+
 exec bspwm
