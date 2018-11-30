@@ -95,6 +95,7 @@ source $ZSH/oh-my-zsh.sh
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
 alias dots='git --git-dir=$HOME/.dots.git/ --work-tree=$HOME'
+alias weather='curl wttr.in'
 
 eval $(thefuck --alias)
 
