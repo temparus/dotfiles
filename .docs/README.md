@@ -6,4 +6,4 @@ This directory contains some additional instructions to do some special things, 
 
 * [Gentoo Install Instructions](INSTALL.md)
 * [STM32CubeMX](InstallSTM32CubeMX.md)
-
+* [dotnet (Mono/dotnet Core](Install-dotnet.md)
