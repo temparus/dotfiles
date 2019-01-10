@@ -136,7 +136,7 @@ echo "sys-kernel/gentoo-sources ~amd64" >> /etc/portage/package.accept_keywords
 Generate an initramfs (mandatory for an encrypted root partition):
 
 ```bash
-genkernel --luks initramfs 
+genkernel --luks --install initramfs 
 ```
 ## Install System Tools
 
@@ -152,7 +152,7 @@ emerge -av grub
 Add the following line to the file `/etc/default/grub`:
 
 ```
-GRUB_CMDLINE_LINUX="dolvm crypt_root=UUID=78536dfa-fb75-4090-93ed-110bbbb670ba root=/dev/mapper/root root_trim=yes"
+GRUB_CMDLINE_LINUX="crypt_root=UUID=78536dfa-fb75-4090-93ed-110bbbb670ba root=/dev/mapper/root root_trim=yes"
 ```
 
 ```bash
