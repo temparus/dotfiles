@@ -1,0 +1,9 @@
+# vpn-kill.ipv6.rules
+
+*filter
+
+-P INPUT DROP
+-P FORWARD DROP
+-P OUTPUT DROP
+
+COMMIT

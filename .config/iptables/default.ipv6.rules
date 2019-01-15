@@ -1,0 +1,16 @@
+# default-ip6.rules
+
+*filter
+
+-P INPUT DROP
+-P FORWARD DROP
+-P OUTPUT ACCEPT
+
+-A INPUT -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT
+-A INPUT -i lo -j ACCEPT
+-A INPUT -m conntrack --ctstate INVALID -j DROP 
+-A INPUT -s fe80::/10 -p ipv6-icmp -j ACCEPT
+-A INPUT -p udp -m conntrack --ctstate NEW -j REJECT --reject-with icmp6-port-unreachable
+-A INPUT -p tcp -m tcp --tcp-flags FIN,SYN,RST,ACK SYN -m conntrack --ctstate NEW -j REJECT --reject-with tcp-reset
+
+COMMIT

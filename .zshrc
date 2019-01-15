@@ -103,6 +103,8 @@ eval $(thefuck --alias)
 
 alias system-update='sudo sh /home/slu/bin/upgrade.sh'
 alias kernel-upgrade='sudo sh /home/slu/bin/kernel-upgrade.sh'
+alias network-vpn-only='sudo sh /home/slu/bin/iptables-config.sh vpn'
+alias network-unrestricted='sudo sh /home/slu/bin/iptables-config.sh unrestricted'
 
 if [[ -z $DISPLAY ]] && [[ $(tty) = /dev/tty1 ]]; then exec startx; fi
 

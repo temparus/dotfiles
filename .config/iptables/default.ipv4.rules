@@ -1,0 +1,16 @@
+# default-ip4.rules
+
+*filter
+
+-P INPUT DROP
+-P FORWARD DROP
+-P OUTPUT ACCEPT
+
+-A INPUT -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT
+-A INPUT -i lo -j ACCEPT
+-A INPUT -p icmp --icmp-type 3 -j ACCEPT
+-A INPUT -p icmp --icmp-type 11 -j ACCEPT
+-A INPUT -p icmp --icmp-type 12 -j ACCEPT
+-A INPUT -p tcp --syn --dport 113 -j REJECT --reject-with tcp-reset
+
+COMMIT

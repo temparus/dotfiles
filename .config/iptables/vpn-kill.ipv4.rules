@@ -1,0 +1,47 @@
+# vpn-kill.ipv4.rules
+
+*filter
+
+-P INPUT DROP
+-P FORWARD DROP
+-P OUTPUT DROP
+
+-A INPUT -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT
+-A INPUT -p icmp --icmp-type 3 -j ACCEPT
+-A INPUT -p icmp --icmp-type 11 -j ACCEPT
+-A INPUT -p icmp --icmp-type 12 -j ACCEPT
+-A INPUT -p tcp --syn --dport 113 -j REJECT --reject-with tcp-reset
+-A OUTPUT -o lo -j ACCEPT
+-A OUTPUT -o tun0 -p icmp -j ACCEPT
+
+# Allow internal network traffic
+-A OUTPUT -d 192.168.0.0/16 -j ACCEPT
+-A OUTPUT -d 10.0.0.0/8 -j ACCEPT
+-A OUTPUT -d 172.16.0.0/12 -j ACCEPT
+
+# Allow HTTPS for NordVPN
+-A OUTPUT -p tcp -d api.nordvpn.com --dport 443 -j ACCEPT
+-A OUTPUT -p icmp -j ACCEPT
+-A OUTPUT -p tcp -d ipecho.net --dport 80 -j ACCEPT
+
+# Allow DNS: NordVPN and OpenDNS
+-A OUTPUT -d 103.86.99.100 -j ACCEPT
+-A OUTPUT -d 103.86.96.100 -j ACCEPT
+-A OUTPUT -d 208.67.222.220 -j ACCEPT
+
+# Allow DNS: ETH Zurich
+-A OUTPUT -d 129.132.98.12 -j ACCEPT
+-A OUTPUT -d 129.132.250.2 -j ACCEPT
+
+# Allow OpenVPN
+-A OUTPUT -p udp -m udp --dport 1194 -j ACCEPT
+
+# Allow IKEv2 (IPSec)
+-A OUTPUT -p udp --dport 500 -j ACCEPT
+-A OUTPUT -p udp --dport 4500 -j ACCEPT
+-A OUTPUT -p 50 -j ACCEPT
+
+# Allow all outgoing connections on tun0
+-A OUTPUT -o tun0 -j ACCEPT
+
+COMMIT
