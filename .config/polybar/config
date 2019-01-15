@@ -1,34 +1,55 @@
-[bar/top]
-width = 100%
-height = 35 
-offset-x = 0
-;offset-y = -1 
-;bottom = true
-monitor = ${env:MONITOR:eDP1}
-
-background = #5a000000
+[colors]
+background = #111
+focuscolor = #333
 foreground = #eee
+disabled = #55
+linecolor = #fba922
+bordercolor = #333
+accent = #e60053
+green = #aaff77
+orange = #fba922
+red = #ff5555
+
+
+[settings]
+screenchange-reload = true
+
+[bar/top]
+enable-ipc = true
+width = 100%
+height = 50 
+offset-x = 0
+monitor = ${env:MONITOR:eDP-1}
+
+background = ${colors.background}
+foreground = ${colors.foreground}
 
 underline-size = 2
 underline-color = #eee
 
+border-bottom-size = 2
+border-bottom-color = ${colors.bordercolor}
+
+primary = #ffb52a
+secondary = #e60053
+alert = #bd2c40
+
 spacing = 1
 padding-left = 0
 padding-right = 0
-module-margin-left = 0 
-module-margin-right = 0
+module-margin-left = 3
+module-margin-right = 3
 
 font-0 = Noto Sans:pixelsize=13;0
-font-1 = FontAwesome:size=10;-2
-font-2 = siji:pixelsize=10;0
+font-1 = unifont:size=13;0
+font-2 = MaterialIcons:pixelsize=18;2
+font-3 = Font Awesome 5 Free:pixelsize=13;0
+font-4 = Font Awesome 5 Free Solid:pixelsize=13;0
+font-5 = Font Awesome 5 Brands:pixelsize=13;0
 
 modules-left = bspwm xwindow
 modules-center = 
-modules-right = temperature wifi battery backlight volume date powermenu
-
-;tray-position = right
-;tray-padding = 2
-;tray-background = #66333333
+modules-right = public-ip memory cpu temperature wifi battery backlight volume date powermenu
 
 wm-restack = bspwm
 
@@ -42,37 +63,58 @@ type = internal/bspwm
 
 ws-icon-0 = web;
 ws-icon-1 = term;
-ws-icon-2 = chat;
-ws-icon-3 = code;
-ws-icon-4 = music;
-ws-icon-default = 
+ws-icon-2 = chat;
+ws-icon-3 = code;
+ws-icon-4 = music;
+ws-icon-default = 
 
 format = <label-state> <label-mode>
 
-label-focused = %icon% %index%
-label-focused-background = #88000000
+label-focused = %icon%   %index%
+label-focused-background = ${colors.focuscolor}
 label-focused-underline= #ddd
 label-focused-padding = 4
 
-label-occupied = %icon% %index%
+label-occupied = %icon%   %index%
 label-occupied-padding = 4
 
-label-urgent = %icon% %index%
+label-urgent = %icon%   %index%
 label-urgent-padding = 4
 
-label-empty = %icon% %index%
+label-empty = %icon%   %index%
 label-empty-foreground = #44ffffff
 label-empty-padding = 4
 
 [module/xwindow]
 type = internal/xwindow
-label = %title:0:120:...%
+label = %title:0:75:...%
 label-padding = 4
+
 
 [module/temperature]
 type = internal/temperature
 
 thermal-zone = 1
+warn-temperature = 75
+format = <ramp> <label>
+format-warn = <label-warn>
+
+label-warn =   %temperature-c%
+label-warn-foreground = ${colors.red}
+
+ramp-0 = %{F#55}
+ramp-1 = %{F#55}
+ramp-2 = %{F#55}
+ramp-3 = 
+ramp-4 = 
+ramp-5 = 
+ramp-6 = 
+ramp-7 = 
+ramp-8 = 
+ramp-9 = %{F#fba922}
+ramp-10 = %{F#fba922}
+ramp-11 = %{F#ff5555}
+
 
 [module/date]
 type = internal/date
@@ -92,18 +134,11 @@ time = %H:%M
 date-alt = %A, %d %B %Y
 time-alt = %H:%M:%S
 
-label = %date% %time%
+label =  %date%   %time%
 format =    <label>
 ;format-background = #ddffffff
-format-background = #88000000
-;format-foreground = #333
 format-padding = 3
 
-[module/padding]
-type = custom/text
-content = 	 
-content-foreground = #00000000
-content-background = #55000000
 
 [module/battery]
 type = internal/battery
@@ -115,77 +150,86 @@ adapter = AC0
 
 poll-interval = 5
 
-format-charging = <animation-charging>  <label-charging>
-format-discharging = <ramp-capacity>  <label-discharging>
-format-full = <ramp-capacity>  <label-full>
-label-charging = %percentage%
-label-discharging = %percentage%
-label-full = %percentage%
-format-charging-padding = 3
-format-discharging-padding = 3
-format-full-padding = 3
+format-charging = <animation-charging> <label-charging>
+format-discharging = <ramp-capacity> <label-discharging>
+format-full =   <label-full>
 
-ramp-capacity-0 = 
-ramp-capacity-1 = 
-ramp-capacity-2 = 
-ramp-capacity-3 = 
-ramp-capacity-4 = 
+ramp-capacity-0 = %{F#ff5555}
+ramp-capacity-1 = %{F#fba922}
+ramp-capacity-2 = 
+ramp-capacity-3 = 
+ramp-capacity-4 = 
+ramp-capacity-5 = 
+ramp-capacity-6 = 
+ramp-capacity-7 = 
+ramp-capacity-8 = 
+ramp-capacity-9 = 
 
-animation-charging-0 = 
-animation-charging-1 = 
-animation-charging-2 = 
-animation-charging-3 = 
-animation-charging-4 = 
-animation-charging-framerate = 750
+animation-charging-0 = 
+animation-charging-1 = 
+animation-charging-framerate = 500
 
 [module/backlight]
-type = internal/xbacklight
+type = internal/backlight
 
-;card = intel_backlight
-enable-scroll = true
+card = intel_backlight
 
 format = <ramp> <label>
-label = %percentage%%
 
-ramp-0 = 🌕
-ramp-1 = 🌔
-ramp-2 = 🌓
-ramp-3 = 🌒
-ramp-4 = 🌑
+ramp-0 = 
+ramp-1 = 
+ramp-2 = 
+
+
+[module/public-ip]
+type = custom/script
+exec = /home/slu/.config/polybar/public-ip.sh
+interval = 5
+label = %output%
+
 
 [module/wifi]
 type = internal/network
-interface = enp0s31f6
-;interface = wlp4s0
-;interval = 5
+interface = wlp4s0
+interval = 3.0
+ping-interval = 10
 
-label-disconnected = Wifi not connected
-label-connected = %ifname% %essid% connected
+format-connected = <ramp-signal> <label-connected>
+label-connected = %essid%
+label-disconnected =    not connected
+label-disconnected-foreground = #66
 
-;format-connected = <label-connected>
-;label-connected =  %essid%
-;label-connected-foreground = #ae81ff
+ramp-signal-0 = %{F#66}
+ramp-signal-1 = %{F#99}
+ramp-signal-2 = 
+ramp-signal-3 = 
+ramp-signal-4 = 
+ramp-signal-5 = 
+ramp-signal-6 = 
+ramp-signal-7 = 
+ramp-signal-8 = 
+ramp-signal-9 = 
+
+animation-packetloss-0 = 
+animation-packetloss-0-foreground = ${colors.red}
+animation-packetloss-1 = 
+animation-packetloss-1-foreground = ${bar/top.foreground}
+animation-packetloss-framerate = 500
+
 
 [module/volume]
-type = internal/volume
+type = internal/pulseaudio
 
-;type = internal/volume
-master-soundcard = default
-speaker-soundcard = 0
-headphone-soundcard = 1
+format-volume = <ramp-volume> <label-volume>
+label-muted =  %{A3:pavucontrol&:}muted%{A}
+label-muted-foreground = #66
 
-format-volume = <ramp-volume>  <label-volume>
-format-muted = <label-muted>
-label-volume = %percentage%
-label-muted =   muted
-label-muted-foreground = #aaa
-format-volume-padding = 3
-format-muted-padding = 3
+label-volume = %{A3:pavucontrol&:}%percentage%%%{A}
 
-ramp-volume-0 = 
-ramp-volume-1 = 
-ramp-volume-2 = 
-ramp-headphones-0 = 
+ramp-volume-0 = 
+ramp-volume-1 = 
+ramp-volume-2 = 
+
 
 ;[module/spotify]
 ;type = custom/script
@@ -200,6 +244,46 @@ ramp-headphones-0 = 
 
 ;label = %output%
 
+
+[module/cpu]
+type = internal/cpu
+interval = 0.5
+format = %{A1:urxvt -e htop --sort-key=PERCENT_CPU &:}<ramp-coreload>%{A}
+
+ramp-coreload-spacing = 1
+ramp-coreload-0 = ▁
+ramp-coreload-0-font = 2
+ramp-coreload-0-foreground = ${colors.green}
+ramp-coreload-1 = ▂
+ramp-coreload-1-font = 2
+ramp-coreload-1-foreground = ${colors.green}
+ramp-coreload-2 = ▃
+ramp-coreload-2-font = 2
+ramp-coreload-2-foreground = ${colors.green}
+ramp-coreload-3 = ▄
+ramp-coreload-3-font = 2
+ramp-coreload-3-foreground = ${colors.green}
+ramp-coreload-4 = ▅
+ramp-coreload-4-font = 2
+ramp-coreload-4-foreground = ${colors.orange}
+ramp-coreload-5 = ▆
+ramp-coreload-5-font = 2
+ramp-coreload-5-foreground = ${colors.orange}
+ramp-coreload-6 = ▇
+ramp-coreload-6-font = 2
+ramp-coreload-6-foreground = ${colors.red}
+ramp-coreload-7 = █
+ramp-coreload-7-font = 2
+ramp-coreload-7-foreground = ${colors.red}
+
+
+[module/memory]
+type = internal/memory
+interval = 3
+format = <label>
+label = %{A1:urxvt -e htop --sort-key=PERCENT_MEM &:}%gb_used% / %gb_total%%{A}
+
+
 [module/powermenu]
 type = custom/menu
 
@@ -209,7 +293,7 @@ label-open-foreground = #fff
 label-close = cancel
 label-close-background = #dd0000
 label-close-foreground = #fff
-label-open-padding = 4 
+label-open-padding = 6
 label-close-padding = 3 
 
 menu-0-0 = reboot
@@ -233,41 +317,3 @@ menu-2-0-padding = 3
 menu-3-0 = hibernate?
 menu-3-0-exec = ~/bin/lock.sh &  
 menu-3-0-padding = 3
-
-;[module/mpd]
-;type = internal/mpd
-
-;host = 127.0.0.1
-;port = 6600
-;password = 
-
-; Seconds to sleep between progressbar/song timer sync
-; Default: 1
-;interval = 2
-
-; Available tags:
-;   <label-song> (default)
-;   <label-time>
-;   <bar-progress>
-;   <toggle> - gets replaced with <icon-(pause|play)>
-;   <toggle-stop> - gets replaced with <icon-(stop|play)>
-;   <icon-random>
-;   <icon-repeat>
-;   <icon-repeatone>
-;   <icon-prev>
-;   <icon-stop>
-;   <icon-play>
-;   <icon-pause>
-;   <icon-next>
-;   <icon-seekb>
-;   <icon-seekf>
-;format-online =    <label-song>
-
-; Available tokens:
-;   %artist%
-;   %album%
-;   %date%
-;   %title%
-; Default: %artist% - %title%
-;label-song = %title%
-;format-online-padding = 3

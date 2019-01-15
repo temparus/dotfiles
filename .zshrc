@@ -94,6 +94,8 @@ source $ZSH/oh-my-zsh.sh
 # screenfetch
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
+export EDITOR='vim'
+
 alias dots='git --git-dir=$HOME/.dots.git/ --work-tree=$HOME'
 alias weather='curl wttr.in'
 

@@ -173,4 +173,6 @@ Follow the instructions in the [Gentoo Handbook](https://wiki.gentoo.org/wiki/Ha
 
 ## Where to go from here
 
-If you are using an encrypted volume, see [dm-crypt](https://wiki.gentoo.org/wiki/Dm-crypt).
+* If you are using an encrypted volume, see [dm-crypt](https://wiki.gentoo.org/wiki/Dm-crypt).
+
+* Install the dotfiles and execute the additional installation scripts from that repository.

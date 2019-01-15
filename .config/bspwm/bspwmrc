@@ -2,6 +2,9 @@
 
 sxhkd &
 
+# Cursor for the root window
+xsetroot -cursor_name left_ptr
+
 bspc monitor -d web term chat code music 6 7 
 
 bspc config border_width         3 
@@ -41,10 +44,8 @@ bspc config pointer_action3 resize_corner
 bspc config focus_follows_pointer true
 
 bspc config presel_feedback_color \#aaaaaa
-
-xsetroot -cursor_name left_ptr
  
-feh --randomize --bg-fill ~/Pictures/bg.png
+feh --randomize --bg-fill ~/pictures/bg.jpg
 compton --config ~/compton.conf -b
 xrdb -merge ~/.Xdefaults
 redshift &

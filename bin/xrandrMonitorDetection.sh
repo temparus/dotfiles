@@ -2,14 +2,14 @@
 
 isHDMI1Connected() {
     local xRandr=$(xrandr -q)
-    [ "$xRandr" == "${xRandr#*HDMI1 con}" ] || return 0
+    [ "$xRandr" == "${xRandr#*HDMI-1 con}" ] || return 0
     return 1
 }
 
 if isHDMI1Connected
 then
-	xrandr --output eDP1 --auto --output HDMI1 --auto --right-of eDP1
+	xrandr --output eDP-1 --auto --output HDMI-1 --auto --right-of eDP-1
 else
- 	xrandr --output eDP1 --auto --output HDMI1 --off
+ 	xrandr --output eDP-1 --auto --output HDMI-1 --off
 fi
 

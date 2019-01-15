@@ -1,5 +1,4 @@
 #!/bin/sh
 
-script_dir=$(dirname $0)
+i3lock -c 000000 -t -i /home/slu/pictures/lock.png
 
-alock -auth pam -bg image:file=$script_dir'/../Pictures/lockscreen.jpg',shade=30

@@ -28,33 +28,6 @@ Generate the correct CPU_FLAGS_X86 content with ```cpuid2cpuflags```.
 ### Install Required Packages
 
 ```bash
-emerge --ask sys-kernel/linux-firmware # Binary blobs for some hardware
+emerge -va sys-kernel/linux-firmware # Binary blobs for some hardware
 emerge -va dev-libs/libinput           # Wacom Touchscreen / Pen input
-```
-
-### Configure X
-
-Create the file ```/etc/X11/xorg.conf.d/90-libinput.conf```:
-
-```bash
-Section "InputClass"
-  Identifier "libinput touchpad catchall"
-  MatchIsTouchpad "on"
-  MatchDevicePath "/dev/input/event*"
-  Driver "libinput"
-  Option "Tapping" "on"
-  Option "ClickMethod" "clickfinger"
-EndSection
-```
-
-Create the file ```/etc/X11/xorg.conf.d/50-wacom.conf```:
-
-```bash
-Section "InputClass"
-  Identifier "Wacom class"
-  MatchProduct "Wacom|WACOM|Hanwang|PTK-540WL|ISDv4|ISD-V4|ISDV4"
-  MatchDevicePath "/dev/input/event*"
-  Driver "wacom"
-  Option "Gesture" "off"
-EndSection
 ```
