@@ -185,7 +185,7 @@ ramp-2 = 
 type = custom/script
 exec = /home/slu/.config/polybar/public-ip.sh
 interval = 5
-label = %output%
+label = %{A1:urxvt -e sudo /home/slu/bin/network-changed.sh wlp4s0 CONNECTED:}%output%%{A}
 
 
 [module/wifi]

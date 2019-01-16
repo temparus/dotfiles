@@ -1,0 +1,62 @@
+#!/sbin/openrc-run
+# Copyright 2019 Sandro Lutz <code@temparus.ch>
+
+name="vpn"
+description="VPN Daemon"
+command_user="root:root"
+
+NETWORKCHANGELISTENER="/run/${RC_SVCNAME}-network-change.pid"
+VPNPID="/run/${RC_SVCNAME}.pid"
+
+. /etc/vpn.conf
+
+depend() {
+  need net
+  before netmount
+}
+
+checktundevice() {
+  if [ ! -e /dev/net/tun ]; then
+    if ! modprobe tun ; then
+      eerror "TUN/TAP support is not available in this kernel"
+      return 1
+    fi
+  fi
+  if [ -h /dev/net/tun ] && [ -c /dev/misc/net/tun ]; then
+    ebegin "Detected broken /dev/net/tun symlink, fixing..."
+    rm -f /dev/net/tun
+    ln -s /dev/misc/net/tun /dev/net/tun
+    eend $?
+  fi
+}
+
+start() {
+  ebegin "Starting VPN Daemon: ${PROFILE}"
+
+  checktundevice || return 1
+
+  if [ "$PROFILE" = "eth" ]; then
+    EXEC="/usr/sbin/vpnc"
+    ARGUMENTS="eth --no-detach --non-inter"
+  elif [ "$PROFILE" = "netflix" ]; then
+    EXEC="/root/.local/bin/openpyn"
+    ARGUMENTS="uk --netflix --silent"
+  else
+    # Default: NordVPN with country code
+    EXEC="/root/.local/bin/openpyn"
+    ARGUMENTS="${PROFILE} --silent"
+  fi
+
+  start-stop-daemon --start --pidfile "${VPNPID}" --background --make-pidfile --exec "${EXEC}" -- $ARGUMENTS > /var/log/vpn.log
+  start-stop-daemon --start --pidfile "${NETWORKCHANGELISTENER}" --background --make-pidfile --exec "/usr/bin/wpa_cli" -- -a /root/bin/network-changed.sh > /var/log/vpn-network-listener.log
+}
+
+stop() {
+  ebegin "Stopping VPN Daemon: ${PROFILE}"
+  start-stop-daemon --stop --pidfile "${VPNPID}" && start-stop-daemon --stop --pidfile "${NETWORKCHANGELISTENER}"
+  local retval=$?
+  /root/.local/bin/openpyn --kill > /dev/null || true
+
+  eend ${retval}
+  return ${retval}
+}

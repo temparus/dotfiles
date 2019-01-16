@@ -1,6 +1,6 @@
-# Setup
+# Gentoo System Setup Guide
 
-This is a general setup guide for Gentoo.
+This is a general system setup guide for Gentoo.
 If you encounter any problems with this guide, see the [guide in the Gentoo Wiki](https://wiki.gentoo.org/wiki/Full_Disk_Encryption_From_Scratch_Simplified)
 
 ## Table of Contents
