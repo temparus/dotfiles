@@ -11,5 +11,5 @@ function disable_acpi_wakeup {
 
 disable_acpi_wakeup XHC
 
-$script_dir/lock.sh && sudo s2ram
+$script_dir/lock && sudo s2ram
 

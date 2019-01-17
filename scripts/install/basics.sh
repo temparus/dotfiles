@@ -7,8 +7,8 @@
 ############################################
 
 add_keyword () {
-    if ! grep -q $1 "/etc/portage/package.accept_keywords"; then
-        echo $1 >> /etc/portage/package.accept_keywords
+    if ! grep -q "$1" "/etc/portage/package.accept_keywords"; then
+        echo "$1" >> /etc/portage/package.accept_keywords
     fi
 }
 
@@ -23,9 +23,12 @@ add_keyword "net-misc/openssh ~amd64"
 
 add_use_flags app-portage layman "sync-plugin-portage git"
 
-emerge -v --autounmask-continue
+emerge -v --autounmask-continue \
         app-portage/layman \
-        app-admin/sudo \
+        dev-vcs/git \
+	dev-vcs/gti \
+	app-misc/sl \
+	app-admin/sudo \
         app-editors/vim \
         app-shells/thefuck \
         app-shells/zsh \
@@ -45,4 +48,3 @@ emerge -v --autounmask-continue
         sys-power/suspend
 
 layman -S
-          

@@ -1,5 +1,10 @@
 #!/bin/bash
 
+if [[ $EUID > 0 ]]; then
+  echo "Script must run as root user!"
+  exit 1
+fi
+
 USER="slu"
 AUTHOR="Sandro Lutz <code@temparus.ch>"
 CURRENT_KV=$(uname -r)
@@ -25,16 +30,15 @@ else
   make olddefconfig
 
   # Make a copy for the dotfiles repository
-  cp "/usr/src/linux/.config" "/home/${USER}/.config/kernel/${DEVICE_NAME}.config"
-  chown "${USER}" "/home/${USER}/.config/kernel/${DEVICE_NAME}.config"
-  chgrp "${USER}" "/home/${USER}/.config/kernel/${DEVICE_NAME}.config"
+  cp "/usr/src/linux/.config" "/home/${USER}/Projects/personal/dotfiles/config/kernel/${DEVICE_NAME}.config"
+  chown "${USER}" "/home/${USER}/Projects/personal/dotfiles/config/kernel/${DEVICE_NAME}.config"
+  chgrp "${USER}" "/home/${USER}/Projects/personal/dotfiles/config/kernel/${DEVICE_NAME}.config"
 
-  cd "/home/${USER}"
+  cd "/home/${USER}/Projects/personal/dotfiles/"
 
-  alias dots="git --git-dir=/home/${USER}/.dots.git/ --work-tree=/home/${USER}/"
-  dots add -f ".config/kernel/${DEVICE_NAME}.config"
-  dots commit --author "${AUTHOR}" -m "[${DEVICE_NAME}] Update kernel config to ${NEW_KV}"
-  dots push
+  git add "config/kernel/${DEVICE_NAME}.config"
+  git commit --author "${AUTHOR}" -m "[${DEVICE_NAME}] Update kernel config to ${NEW_KV}"
+  git push
 fi
 
 echo "Building kernel $NEW_KV"

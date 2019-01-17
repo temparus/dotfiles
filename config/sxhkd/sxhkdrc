@@ -5,11 +5,10 @@
 # terminal emulator
 super + Return
 	urxvt
-#	gnome-terminal	
 
 # GNOME System Monitor
 ctrl + shift + Escape
-	gnome-system-monitor
+	urxvt -e htop
 
 # program launcher
 super + space
@@ -160,11 +159,11 @@ ctrl + shift + Print
 
 # Lock Desktop
 super + shift + x
-	~/bin/lock.sh
+	lock
 
 # Hibernate Desktop
 super + shift + z
-	~/bin/hibernate.sh
+	hibernate
 
 # shut down computer
 super + shift + q
@@ -174,20 +173,20 @@ super + shift + q
 
 ### Mute
 XF86AudioMute
-	~/bin/audio.sh toggle sinks
+	manipulate-audio toggle sinks
 
 XF86AudioMicMute
-	~/bin/audio.sh toggle sources
+	manipulate-audio toggle sources
 
 ### Master Volume
 XF86AudioRaiseVolume
-	~/bin/audio.sh '+2%'
+	manipulate-audio '+2%'
 
 super + XF86AudioRaiseVolume
-	~/bin/audio.sh '+10%'
+	manipulate-audio '+10%'
 
 XF86AudioLowerVolume
-	~/bin/audio.sh '-2%'
+	manipulate-audio '-2%'
 
 super + XF86AudioLowerVolume
 	~/bin/audio.sh '-10%'
@@ -211,5 +210,4 @@ super + XF86MonBrightnessDown
 # Monitor detection
 XF86Display
 	notify-send "Detect connected monitors..."; \
-	~/bin/xrandrMonitorDetection.sh
-
+	detect-monitors

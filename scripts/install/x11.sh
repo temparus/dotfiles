@@ -7,8 +7,8 @@
 ############################################
 
 add_keyword () {
-    if ! grep -q $1 "/etc/portage/package.accept_keywords"; then
-        echo $1 >> /etc/portage/package.accept_keywords
+    if ! grep -q "$1" "/etc/portage/package.accept_keywords"; then
+        echo "$1" >> /etc/portage/package.accept_keywords
     fi
 }
 
@@ -57,10 +57,11 @@ case ${answer:0:1} in
 
         add_use_flags media-video vlc "lua matroska vnc"
 
-        emerge -v --autounmask-continue
+        emerge -v --autounmask-continue \
                 net-im/telegram-desktop-bin \
                 www-client/vivaldi \
                 app-editors/visual-studio-code \
+                app-text/evince \
                 media-sound/spotify \
                 media-video/vlc
     ;;
