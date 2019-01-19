@@ -47,6 +47,8 @@ start() {
     ARGUMENTS="${PROFILE} --silent"
   fi
 
+  # Disable IPv6 Temporarily
+  echo 1 > /proc/sys/net/ipv6/conf/all/disable_ipv6
   start-stop-daemon --start --pidfile "${VPNPID}" --background --make-pidfile --exec "${EXEC}" -- $ARGUMENTS > /var/log/vpn.log
   start-stop-daemon --start --pidfile "${NETWORKCHANGELISTENER}" --background --make-pidfile --exec "/usr/bin/wpa_cli" -- -a /root/.local/bin/network-changed.sh > /var/log/vpn-network-listener.log
 }
@@ -56,6 +58,9 @@ stop() {
   start-stop-daemon --stop --pidfile "${VPNPID}" && start-stop-daemon --stop --pidfile "${NETWORKCHANGELISTENER}"
   local retval=$?
   /root/.local/bin/openpyn --kill > /dev/null || true
+
+  # Re-enable IPv6
+  echo 0 > /proc/sys/net/ipv6/conf/all/disable_ipv6
 
   eend ${retval}
   return ${retval}

@@ -25,11 +25,13 @@ if [[ $response =~ ^(no|n)$ ]]; then
   exit
 fi
 
+script_dir=$(dirname $(realpath $0))
+
 echo
 echo
 echo "+----------------------------------------+"
 echo "* Installing basic portage configuration..."
-python dotty/dotty.py -rf --config cryptopad.system.json
+python $script_dir/dotty/dotty.py -rf --config $script_dir/cryptopad.system.json
 
 echo
 echo

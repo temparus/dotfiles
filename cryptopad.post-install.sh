@@ -25,7 +25,7 @@ if [[ $response =~ ^(no|n)$ ]]; then
   exit
 fi
 
-script_dir=$(dirname $0)
+script_dir=$(dirname $(realpath $0))
 
 echo
 echo
