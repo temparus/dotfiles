@@ -11,8 +11,11 @@
 -A INPUT -p icmp --icmp-type 11 -j ACCEPT
 -A INPUT -p icmp --icmp-type 12 -j ACCEPT
 -A INPUT -p tcp --syn --dport 113 -j REJECT --reject-with tcp-reset
--A OUTPUT -o lo -j ACCEPT
 -A OUTPUT -o tun0 -p icmp -j ACCEPT
+
+# Allow any traffic on localhost
+-A INPUT -i lo -j ACCEPT
+-A OUTPUT -o lo -j ACCEPT
 
 # Allow internal network traffic
 -A OUTPUT -d 192.168.0.0/16 -j ACCEPT
