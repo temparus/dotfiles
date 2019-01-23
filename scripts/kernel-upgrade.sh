@@ -51,6 +51,8 @@ mount /boot
 echo "Installing kernel $NEW_KV"
 
 make install
+# generate initramfs and install it
+genkernel --install --luks initramfs
 # only keep the newest three kernels
 eclean-kernel -n 3
 grub-mkconfig -o /boot/grub/grub.cfg
