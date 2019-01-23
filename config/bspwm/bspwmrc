@@ -44,8 +44,8 @@ bspc config pointer_action3 resize_corner
 bspc config focus_follows_pointer true
 
 bspc config presel_feedback_color \#aaaaaa
- 
-feh --randomize --bg-fill ~/pictures/bg.jpg
+
+feh --bg-scale --no-fehbg ~/pictures/bg.jpg
 compton --config ~/compton.conf -b
 xrdb -merge ~/.Xdefaults
 redshift &
