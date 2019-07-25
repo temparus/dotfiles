@@ -211,3 +211,9 @@ super + XF86MonBrightnessDown
 XF86Display
 	notify-send "Detect connected monitors..."; \
 	detect-monitors
+
+# Toggle Bluetooth power state
+XF86Bluetooth
+        notify-send "Toggle Bluetooth state..."; \
+        toggle-bluetooth
+
