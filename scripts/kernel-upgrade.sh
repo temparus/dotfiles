@@ -36,9 +36,9 @@ else
 
   cd "/home/${USER}/Projects/personal/dotfiles/"
 
-  git add "config/kernel/${DEVICE_NAME}.config"
-  git commit --author "${AUTHOR}" -m "[${DEVICE_NAME}] Update kernel config to ${NEW_KV}"
-  git push
+  su $USER -c "git add \"config/kernel/${DEVICE_NAME}.config\""
+  su $USER -c "git commit --author \"${AUTHOR}\" -m \"[${DEVICE_NAME}] Update kernel config to ${NEW_KV}\""
+  su $USER -c "git push"
 fi
 
 echo "Building kernel $NEW_KV"
