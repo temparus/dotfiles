@@ -1,4 +1,4 @@
-# Lenovo ThinkPad X1 Yoga: Specific Configuration
+# Lenovo ThinkPad X1 Yoga
 
 More information on the [Gentoo Wiki](https://wiki.gentoo.org/wiki/Lenovo_ThinkPad_X1_Yoga_2nd_Generation).
 

@@ -1,3 +1,9 @@
+# dotfiles
+
+This repository contains the personal configuration files for various linux applications on my devices.
+
+More information about how to access the documentation can be found in [docs/README.md](docs/README.md).
+
 # Gentoo
 
 (This guide is thought only to be an additional help to the official Gentoo Handbook!)

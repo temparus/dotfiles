@@ -1,21 +1,7 @@
-# Gentoo System Setup Guide
+# System Setup
 
 This is a general system setup guide for Gentoo.
 If you encounter any problems with this guide, see the [guide in the Gentoo Wiki](https://wiki.gentoo.org/wiki/Full_Disk_Encryption_From_Scratch_Simplified)
-
-## Table of Contents
-
-* [Create Partitions](#create-partitions)
-* [Create boot filesystem](#create-boot-filesystem)
-* [*(optional)* Prepare encrypted partition](#optional-prepare-encrypted-partition)
-* [Format root partition](#format-root-partition)
-* [Install Gentoo](#install-gentoo)
-* [Configure fstab](#configure-fstab)
-* [Configure the Linux Kernel](#configure-the-linux-kernel)
-* [Install System Tools](#install-system-tools)
-* [Install GRUB2](#install-grub2)
-* [Finalizing](#finalizing)
-* [Where to go from here](#where-to-go-from-here)
 
 ## Create Partitions
 Partition schema is as following:
