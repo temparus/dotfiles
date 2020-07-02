@@ -1,5 +1,10 @@
 #! /bin/sh
 
+# run plasma fixes before starting bspwm
+#if [ -x ~/.config/bspwm/plasmafixrc ]; then
+#    sh ~/.config/bspwm/plasmafixrc
+#fi
+
 sxhkd &
 
 # Cursor for the root window
@@ -45,10 +50,11 @@ bspc config focus_follows_pointer true
 
 bspc config presel_feedback_color \#aaaaaa
 
-feh --bg-scale --no-fehbg ~/pictures/bg.jpg
 compton --config ~/compton.conf -b
 xrdb -merge ~/.Xdefaults
-redshift &
 
-#panel &
-polybar top &
+# Configure wallpaper
+feh --bg-scale --no-fehbg ~/.dotfiles/wallpaper.jpg
+
+#Start polybar
+bash ~/.config/polybar/launch.sh

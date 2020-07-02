@@ -30,3 +30,12 @@ To configure the kernel correctly, boot into an Ubuntu LIVE system and check wha
 ## Additional Documentation
 
 See [additional install instructions](.docs/README.md)
+
+## NOTES
+
+Polybar installed dependencies:
+
+* siji-git
+* wireless_tools
+* termsyn-font
+* papirus-icon-theme
