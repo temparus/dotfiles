@@ -59,20 +59,56 @@ create_volumes() {
     swapon "/dev/mapper/${vol_group}-swap"
 }
 
+prepare_lvm_password() {
+    lvm_password=""
+    local lvm_password_repeated="1"
+
+    echo "For encrypting the LVM partition, a password is required."
+
+    while [[ "$lvm_password" != "$lvm_password_repeated" ]]
+    do
+        read -sp "  > Enter password: " lvm_password
+        echo ""
+        read -sp "  > Repeat password: " lvm_password_repeated
+        echo ""
+    done
+}
+
+prepare_boot_password() {
+    boot_password=""
+    local boot_password_repeated="1"
+
+    echo "For encrypting the boot partition, a password is required."
+    read -p "Do you want to use the same password as for the LVM partition [Y/n]: " confirm
+
+    if [[ $confirm == [nN] || $confirm == [nN][eE][sS] ]]; then
+        boot_password=${lvm_password}
+        boot_password_repeated=${boot_password}
+    fi
+
+    while [[ "$boot_password" != "$boot_password_repeated" ]]
+    do
+        read -sp "  > Enter password: " boot_password
+        echo ""
+        read -sp "  > Repeat password: " boot_password_repeated
+        echo ""
+    done
+}
+
 prepare_boot_partition() {
     partitions=($(lsblk -l | sed -n "s/\(${disk}[^ ]*\).* part.*/\1/p"))
     # Format EFI partition as fat32 
     mkfs.fat -F32 "/dev/${partitions[0]}"
     # Configure encryption for boot partition and format as ext4
-    cryptsetup luksFormat --type luks1 "/dev/${partitions[1]}"
-    cryptsetup open "/dev/${partitions[1]}" cryptboot
+    printf "${boot_password}\n${boot_password}\n" | cryptsetup luksFormat --type luks1 "/dev/${partitions[1]}"
+    printf "${boot_password}\n" | cryptsetup open "/dev/${partitions[1]}" cryptboot
     mkfs.ext4 /dev/mapper/cryptboot
     # Mount boot partition
     mkdir /mnt/boot
     mount /dev/mapper/cryptboot /mnt/boot
     # Mount EFI partition
     mkdir /mnt/boot/efi
-    mount "/dev/${partitions[2]}" /mnt/boot/efi
+    mount "/dev/mapper/cryptboot" /mnt/boot/efi
 }
 
 install_key_file_for_initramfs() {
@@ -87,36 +123,28 @@ echo -e "Step 01: Disk Preparation\n"
 echo "This setup will configure a LVM on LUKS (root and swap partition)"
 echo -e "and a LUKS encrypted boot partition.\n"
 
-confirm "Do you want to partition your disks?" 0
+confirm "  > Do you want to partition your disks?" 0
 
 select_disk
 task "Creating partitions" create_partitions $disk
 task "Installing disk encryption toolset" install_encryption_toolset
 
-echo -e "\nMake sure that you have two YubiKeys ready"
-echo -e "with the second slot configured as Challenge-Response"
-echo -e "with the same secret!\n"
+printf "${ORANGE}ATTENTION${NC}: Have the YubiKey ready.\n\n"
+printf "You should have ${UNDERLINE}at least TWO${NC} YubiKeys with the same Challenge-Response secret for slot 2!\n\n"
 
-printf "${ORANGE}ATTENTION${NC}: Have the YubiKey ready.\n"
-
+read -sp "  = Press ANY key to continue. ="
+prepare_lvm_password
 set -e
 lvm_partition="${partitions[${#partitions[@]} - 1]}"
-ykfde-format --cipher aes-xts-plain64 --key-size 512 --hash sha256 --iter-time 5000 --type luks2 "/dev/${lvm_partition}"
-ykfde-open -d "/dev/${lvm_partition}" -n cryptlvm
+echo 
+printf "${lvm_password}\n${lvm_password}\n" | ykfde-format --cipher aes-xts-plain64 --key-size 512 --hash sha256 --iter-time 5000 --type luks2 "/dev/${lvm_partition}"
+printf "${lvm_password}\n" | ykfde-open -d "/dev/${lvm_partition}" -n cryptlvm
 set +e
-
-lvm_password_repeated=""
-lvm_password_repeated="1"
-
-while [[ "$lvm_password" != "$lvm_password_repeated" ]]
-do
-    read -sp "Your LVM password: " lvm_password
-    read -sp "Repeat your LVM password: " lvm_password_repeated
-done
 
 ykfde_challenge=$(printf "$lvm_password" | sha256sum | awk '{print $1}')
 sed -i "s/#YKFDE_CHALLENGE=\"/YKFDE_CHALLENGE=\"$ykfde_challenge/g" /etc/ykfde.conf
 
 task "Creating LVM volumes" create_volumes
-prepare_boot_partition
+prepare_boot_password
+task "Set up encryption for boot partition" prepare_boot_partition
 task "Installing a keyfile for initramfs" install_key_file_for_initramfs
