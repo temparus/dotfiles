@@ -80,22 +80,22 @@ create_encrypted_lvm_partition() {
     printf "with the same Challenge-Response secret for slot 2!\n\n"
 
     read -sp " = Press ENTER to continue. = "
-    echo ""
+    printf "\n\n"
 
     prepare_lvm_password
+
+    # Add challenge to configuration file
+    ykfde_challenge=$(printf "$lvm_password" | sha256sum | awk '{print $1}')
+    sed -i "s/#YKFDE_CHALLENGE=\"/YKFDE_CHALLENGE=\"$ykfde_challenge/g" /etc/ykfde.conf
 
     # Create encrypted LVM partition with Yubikey as 2nd factor
     set -e
     lvm_partition="${partitions[${#partitions[@]} - 1]}"
     echo 
-    printf "${lvm_password}\n${lvm_password}\n" | ykfde-format --cipher aes-xts-plain64 --key-size 512 --hash sha256 --iter-time 5000 --type luks2 "/dev/${lvm_partition}"
+    echo "${lvm_password}" | ykfde-format -q --cipher aes-xts-plain64 --key-size 512 --hash sha256 --iter-time 5000 --type luks2 "/dev/${lvm_partition}"
     echo -e "\nTrying to decrypt the LVM encrypted partition now.\n"
-    printf "${lvm_password}\n" | ykfde-open -d "/dev/${lvm_partition}" -n cryptlvm
+    echo "${lvm_password}" | ykfde-open -d "/dev/${lvm_partition}" -n cryptlvm
     set +e
-
-    # Add challenge to configuration file
-    ykfde_challenge=$(printf "$lvm_password" | sha256sum | awk '{print $1}')
-    sed -i "s/#YKFDE_CHALLENGE=\"/YKFDE_CHALLENGE=\"$ykfde_challenge/g" /etc/ykfde.conf
 }
 
 prepare_boot_password() {
@@ -124,8 +124,8 @@ prepare_boot_partition() {
     # Format EFI partition as fat32 
     mkfs.fat -F32 "/dev/${partitions[0]}"
     # Configure encryption for boot partition and format as ext4
-    printf "${boot_password}\n${boot_password}\n" | cryptsetup luksFormat --type luks1 "/dev/${partitions[1]}"
-    printf "${boot_password}\n" | cryptsetup open "/dev/${partitions[1]}" cryptboot
+    echo "${boot_password}" | cryptsetup -q luksFormat --type luks1 "/dev/${partitions[1]}"
+    echo "${boot_password}" | cryptsetup open "/dev/${partitions[1]}" cryptboot
     mkfs.ext4 /dev/mapper/cryptboot
     # Mount boot partition
     mkdir /mnt/boot
