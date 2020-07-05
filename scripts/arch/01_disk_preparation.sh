@@ -105,7 +105,7 @@ prepare_boot_password() {
     echo "For encrypting the boot partition, a password is required."
     read -p "Do you want to use the same password as for the LVM partition [Y/n]: " confirm
 
-    if [[ $confirm == [nN] || $confirm == [nN][eE][sS] ]]; then
+    if [[ $confirm == [yY] || $confirm == [yY][eE][sS] ]]; then
         boot_password=${lvm_password}
         boot_password_repeated=${boot_password}
     fi
