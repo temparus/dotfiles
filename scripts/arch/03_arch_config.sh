@@ -100,8 +100,8 @@ create_admin_user() {
 
 configure_secure_boot() {
     pacman --noconfirm -Sy binutils fakeroot
-    sudo -u nobody curl -L https://github.com/xmikos/cryptboot/archive/master.zip | bsdtar -xvf - -C /tmp
-    sudo -u nobody /bin/bash -c "cd /tmp/cryptboot-master && makepkg --skipchecksums"
+    sudo -u nobody /usr/bin/bash -c "curl -L https://github.com/xmikos/cryptboot/archive/master.zip | bsdtar -xvf - -C /tmp"
+    sudo -u nobody /usr/bin/bash -c "cd /tmp/cryptboot-master && makepkg --skipchecksums"
     rm -r /tmp/cryptboot-master
 
     cryptboot-efikeys create
@@ -127,8 +127,8 @@ install_yay() {
     read -p "Do you want to install Yet Another Yoghurt (AUR helper) [y/N]: " confirm
     if [[ $confirm == [yY] || $confirm == [yY][eE][sS] ]]; then
         pacman --noconfirm -Sy fakeroot binutils make sudo git pkgconf go
-        sudo -u nobody git clone https://aur.archlinux.org/yay.git /tmp/yay
-        sudo -u nobody /bin/bash -c "cd /tmp/yay && makepkg"
+        sudo -u nobody /usr/bin/bash -c "git clone https://aur.archlinux.org/yay.git /tmp/yay"
+        sudo -u nobody /usr/bin/bash -c "cd /tmp/yay && makepkg"
         rm -r /tmp/yay
     fi
 }
