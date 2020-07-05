@@ -17,7 +17,7 @@ vol_group="ArchVolGroup"
 # Functions
 select_disk() {
     # Get all available disks
-    disks=($(lsblk -l | sed -n 's/\([^ ]+\).* disk.*/\1/'))
+    disks=($(lsblk -l | sed -n 's/\([^ ]*\).* disk.*/\1/p'))
 
     PS3="Enter a number to select a disk: "
 
@@ -84,7 +84,7 @@ rebuild_initramfs() {
 install_grub_bootloader() {
     pacman -Sy grub
 
-    partitions=($(lsblk -l | sed -n "s/\(${disk}[^ ]+\).* part.*/\1/"))
+    partitions=($(lsblk -l | sed -n "s/\(${disk}[^ ]*\).* part.*/\1/p"))
     lvm_uuid=$(blkid | sed -n "/\/dev\/${partitions[${#partitions[@]} - 1]}/s/.* UUID=\"\([^\"]*\)\".*/\1/p")
     root_uuid=$(blkid | sed -n "/\/dev\/mapper\/${vol_group}-root/s/.* UUID=\"\([^\"]*\)\".*/\1/p")
     swap_uuid=$(blkid | sed -n "/\/dev\/mapper\/${vol_group}-swap/s/.* UUID=\"\([^\"]*\)\".*/\1/p")

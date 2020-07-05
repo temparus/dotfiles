@@ -15,7 +15,7 @@ vol_group="ArchVolGroup"
 # Functions
 select_disk() {
     # Get all available disks
-    disks=($(lsblk -l | sed -n 's/\([^ ]+\).* disk.*/\1/'))
+    disks=($(lsblk -l | sed -n 's/\([^ ]*\).* disk.*/\1/p'))
 
     PS3="Enter a number to select a disk: "
 
@@ -74,7 +74,7 @@ create_volumes() {
 }
 
 prepare_boot_partition() {
-    partitions=($(lsblk -l | sed -n "s/\(${disk}[^ ]+\).* part.*/\1/"))
+    partitions=($(lsblk -l | sed -n "s/\(${disk}[^ ]*\).* part.*/\1/p"))
     # Format EFI partition as fat32 
     mkfs.fat -F32 "/dev/${partitions[0]}"
     # Configure encryption for boot partition and format as ext4
