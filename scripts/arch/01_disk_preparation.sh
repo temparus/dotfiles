@@ -23,12 +23,12 @@ create_partitions() {
     parted --script /dev/$disk mklabel gpt
     parted --script /dev/$disk mkpart "efi" fat32 2048s 34MiB
     parted --script /dev/$disk mkpart "boot" ext4 34MiB 584MiB
-    parted --script /dev/$disk mkpart "lvm" ext4 582MiB 100%
+    parted --script /dev/$disk mkpart "lvm" ext4 584MiB 100%
 }
 
 install_encryption_toolset() {
     # Install yubikey specific crypto software
-    pacman -Sy yubikey-manager yubikey-personalization pcsc-tools libu2f-host make cryptsetup
+    pacman --noconfirm -Sy yubikey-manager yubikey-personalization pcsc-tools libu2f-host make cryptsetup
     systemctl start pcscd.service
     curl -L https://github.com/agherzan/yubikey-full-disk-encryption/archive/master.zip | bsdtar -xvf - -C .
     cd yubikey-full-disk-encryption-master
@@ -93,9 +93,9 @@ select_disk
 task "Creating partitions" create_partitions $disk
 task "Installing disk encryption toolset" install_encryption_toolset
 
-echo -e "\nMake sure that you have two YubiKeys ready\n"
-echo -e "with the second slot configured as Challenge-Response\n"
-echo -e "with the same secret!\n\n"
+echo -e "\nMake sure that you have two YubiKeys ready"
+echo -e "with the second slot configured as Challenge-Response"
+echo -e "with the same secret!\n"
 
 printf "${ORANGE}ATTENTION${NC}: Have the YubiKey ready.\n"
 

@@ -14,7 +14,7 @@ vol_group="ArchVolGroup"
 
 install_encryption_toolset() {
     # Install yubikey specific crypto software
-    pacman -Sy yubikey-manager yubikey-personalization pcsc-tools libu2f-host make cryptsetup
+    pacman --noconfirm -Sy yubikey-manager yubikey-personalization pcsc-tools libu2f-host make cryptsetup
     systemctl start pcscd.service
     curl -L https://github.com/agherzan/yubikey-full-disk-encryption/archive/master.zip | bsdtar -xvf - -C .
     cd yubikey-full-disk-encryption-master

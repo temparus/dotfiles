@@ -17,7 +17,7 @@ vol_group="ArchVolGroup"
 # Functions
 install_encryption_toolset() {
     # Install yubikey specific crypto software
-    pacman -Sy yubikey-manager yubikey-personalization pcsc-tools libu2f-host make cryptsetup
+    pacman --noconfirm -Sy yubikey-manager yubikey-personalization pcsc-tools libu2f-host make cryptsetup
     systemctl start pcscd.service
     curl -L https://github.com/agherzan/yubikey-full-disk-encryption/archive/master.zip | bsdtar -xvf - -C .
     cd yubikey-full-disk-encryption-master
@@ -68,7 +68,7 @@ rebuild_initramfs() {
 }
 
 install_grub_bootloader() {
-    pacman -Sy grub
+    pacman --noconfirm -Sy grub
 
     lvm_uuid=$(blkid | sed -n "/\/dev\/${partitions[${#partitions[@]} - 1]}/s/.* UUID=\"\([^\"]*\)\".*/\1/p")
     root_uuid=$(blkid | sed -n "/\/dev\/mapper\/${vol_group}-root/s/.* UUID=\"\([^\"]*\)\".*/\1/p")
@@ -96,7 +96,7 @@ create_admin_user() {
 }
 
 configure_secure_boot() {
-    pacman -Sy binutils fakeroot
+    pacman --noconfirm -Sy binutils fakeroot
     sudo -u nobody curl -L https://github.com/xmikos/cryptboot/archive/master.zip | bsdtar -xvf - -C .
     sudo -u nobody /bin/bash -c "cd cryptboot-master && makepkg --skipchecksums"
     rm -r cryptboot-master
