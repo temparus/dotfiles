@@ -49,7 +49,7 @@ select_disk() {
         read -p "Select disk [0-${last_index}]: " disk_index
         disk=${disks[$disk_index]}
     done
-    partitions=($(lsblk -l | sed -n "s/\(${disk}[^ ]*\).* part.*/\1/p"))
+    partitions=($(lsblk -l -x NAME | sed -n "s/\(${disk}[^ ]*\).* part.*/\1/p"))
 }
 
 # ----------------------------------

@@ -120,7 +120,7 @@ prepare_boot_password() {
 }
 
 prepare_boot_partition() {
-    partitions=($(lsblk -l | sed -n "s/\(${disk}[^ ]*\).* part.*/\1/p"))
+    partitions=($(lsblk -l -x NAME | sed -n "s/\(${disk}[^ ]*\).* part.*/\1/p"))
     # Format EFI partition as fat32 
     mkfs.fat -F32 "/dev/${partitions[0]}"
     # Configure encryption for boot partition and format as ext4
