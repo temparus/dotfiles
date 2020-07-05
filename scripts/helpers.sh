@@ -30,6 +30,27 @@ clear_log() {
 }
 
 # ----------------------------------
+# Select disk for further processing
+#
+# Also fills the variable "partitions"
+# with all partitions of the selected
+# drive.
+# ----------------------------------
+select_disk() {
+    # Get all available disks
+    disks=($(lsblk -l | sed -n 's/\([^ ]*\).* disk.*/\1/p'))
+
+    for i in "${!disks[@]}"; do 
+        printf "%s) %s\n" "$i" "${disks[$i]}"
+    done
+
+    while [[ !$disk ]]; do
+        read -p "Select disk [0-${#disks[@]}]: " disk
+    done
+    partitions=($(lsblk -l | sed -n "s/\(${disk}[^ ]*\).* part.*/\1/p"))
+}
+
+# ----------------------------------
 # Spinner function
 # ----------------------------------
 

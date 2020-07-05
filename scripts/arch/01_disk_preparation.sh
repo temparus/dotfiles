@@ -13,20 +13,6 @@ source ../helpers.sh
 vol_group="ArchVolGroup"
 
 # Functions
-select_disk() {
-    # Get all available disks
-    disks=($(lsblk -l | sed -n 's/\([^ ]*\).* disk.*/\1/p'))
-
-    PS3="Enter a number to select a disk: "
-
-    select disk in $disks
-    do
-        if [[ $disk ]]; then
-            break
-        fi
-    done
-}
-
 create_partitions() {
     local disk=$1
 

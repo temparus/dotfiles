@@ -27,21 +27,6 @@ install_encryption_toolset() {
     sed -i "s/#YKFDE_CHALLENGE_SLOT=\"2\"/YKFDE_CHALLENGE_SLOT=\"2\"/g" /etc/ykfde.conf
 }
 
-select_disk() {
-    # Get all available disks
-    disks=($(lsblk -l | sed -n 's/\([^ ]+\).* disk.*/\1/'))
-
-    PS3="Enter a number to select a disk: "
-
-    select disk in $disks
-    do
-        if [[ $disk ]]; then
-            break
-        fi
-    done
-    partitions=($(lsblk -l | sed -n "s/\(${disk}[^ ]+\).* part.*/\1/"))
-}
-
 decrypt_partitions() {
     set -e
     lvm_partition="${partitions[${#partitions[@]} - 1]}"
