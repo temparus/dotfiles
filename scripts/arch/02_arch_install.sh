@@ -37,11 +37,14 @@ copy_encryption_toolset_config() {
 }
 
 copy_arch_config_script() {
-    # Relative path from the working directory to the script location.
-    DIR=$(dirname "${BASH_SOURCE[0]}")
     mkdir /mnt/home/arch
     cp "${DIR}/03_arch_config.sh" /mnt/home/arch
     cp "$DIR/../helper.sh" /mnt/home
+}
+
+copy_files() {
+    copy_encryption_toolset_config
+    copy_arch_config_script
 }
 
 echo "=================================="
@@ -49,5 +52,4 @@ echo -e "Step 02: Arch Linux Installation\n"
 
 task "Installing the base system" install_base_system
 generate_fstab
-copy_encryption_toolset_config
-copy_arch_config_script
+task "Copy files to /mnt/home" copy_files

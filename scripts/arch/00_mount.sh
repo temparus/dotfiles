@@ -31,17 +31,18 @@ install_encryption_toolset() {
 }
 
 decrypt_partitions() {
-    set -e
     lvm_partition="${partitions[${#partitions[@]} - 1]}"
+    boot_partition="${partitions[1]}"
+    set -e
     ykfde-open -d "/dev/${lvm_partition}" -n cryptlvm
-    cryptsetup open "/dev/${partitions[1]}" cryptboot
+    cryptsetup open "/dev/${boot_partition}" cryptboot
     set +e
 }
 
 mount_partitions() {
     mount "/dev/${vol_group}-root" /mnt
     mount /dev/mapper/cryptboot /mnt/boot
-    mount "/dev/${partitions[2]}" /mnt/boot/efi
+    mount "/dev/${partitions[0]}" /mnt/boot/efi
     swapon "/dev/${vol_group}-swap"
 }
 
@@ -54,4 +55,4 @@ printf "${ORANGE}ATTENTION${NC}: Have vour passwords and YubiKey ready.\n"
 task "Installing disk encryption toolset" install_encryption_toolset
 select_disk
 decrypt_partitions
-mount_partitions
+task "Mounting partitions" mount_partitions

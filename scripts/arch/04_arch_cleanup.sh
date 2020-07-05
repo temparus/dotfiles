@@ -3,6 +3,7 @@
 ############################################
 ##   Installation script for Arch Linux   ##
 ## -------------------------------------- ##
+## Chapter: Install Files Cleanup         ##
 ## Author: Sandro Lutz <code@temparus.ch> ##
 ############################################
 
@@ -11,14 +12,14 @@ DIR=$(dirname "${BASH_SOURCE[0]}")
 
 source "${DIR}/../helpers.sh"
 
-clear_logfile
+# Functions
+remove_arch_config_script() {
+    rm -r /mnt/home/arch
+    rm /mnt/home/helpers.sh
+    rm ykfde.conf
+}
 
-printf "Welcome to the installation script for ${UNDERLINE}${BOLD}Arch Linux${NC}\n\n"
+echo "=================================="
+echo -e "Step 04: Arch Linux Cleanup\n"
 
-task "Updating local clock" timedatectl set-ntp true
-
-set -e
-$DIR/01_disk_preparation.sh
-$DIR/02_arch_install.sh
-arch-chroot /mnt /usr/bin/bash -c /home/arch/03_arch_config.sh
-$DIR/04_arch_cleanup.sh
+task "Cleaning up temporary files" remove_arch_config_script
