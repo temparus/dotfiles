@@ -34,15 +34,15 @@ configure_timezone() {
 
     while [[ ! -f "/usr/share/zoneinfo/${timezone}" ]]
     do
-        read -sp "Enter timezone (e.g. Europe/Zurich): " timezone
+        read -p "Enter timezone (e.g. Europe/Zurich): " timezone
     done
-    ls -sf "/usr/share/zoneinfo/${timezone}" /etc/localtime
+    ln -sf "/usr/share/zoneinfo/${timezone}" /etc/localtime
     hwclock --systohc
 }
 
 configure_locales() {
     echo "Uncomment all locales which should be generated in the following file."
-    read -sp "Press ANY key to continue." unused_input
+    read -sp "Press ENTER to continue." unused_input
 
     vim /etc/locale.gen
 
