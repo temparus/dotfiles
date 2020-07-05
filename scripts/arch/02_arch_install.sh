@@ -7,7 +7,10 @@
 ## Author: Sandro Lutz <code@temparus.ch> ##
 ############################################
 
-source ../helpers.sh
+# Relative path from the working directory to the script location.
+DIR=$(dirname "${BASH_SOURCE[0]}")
+
+source "${DIR}/../helpers.sh"
 
 # Functions
 install_base_system() {
