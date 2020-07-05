@@ -20,4 +20,4 @@ task "Updating local clock" timedatectl set-ntp true
 set -e
 $DIR/01_disk_preparation.sh
 $DIR/02_arch_install.sh
-arch-chroot /mnt /usr/bin/bash -c "/home/03_arch_config.sh"
+arch-chroot /mnt /usr/bin/bash -c "/home/arch/03_arch_config.sh"

@@ -36,7 +36,9 @@ copy_encryption_toolset_config() {
 copy_arch_config_script() {
     # Relative path from the working directory to the script location.
     DIR=$(dirname "${BASH_SOURCE[0]}")
-    cp "${DIR}/03_arch_config.sh" /mnt/home
+    mkdir /mnt/home/arch
+    cp "${DIR}/03_arch_config.sh" /mnt/home/arch
+    cp "$DIR/../helper.sh" /mnt/home
 }
 
 echo "=================================="

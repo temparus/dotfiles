@@ -92,7 +92,7 @@ create_encrypted_lvm_partition() {
     set -e
     lvm_partition="${partitions[${#partitions[@]} - 1]}"
     echo 
-    echo "${lvm_password}" | ykfde-format -q --cipher aes-xts-plain64 --key-size 512 --hash sha256 --iter-time 5000 --type luks2 "/dev/${lvm_partition}"
+    echo -e "${lvm_password}\n${lvm_password}" | ykfde-format --cipher aes-xts-plain64 --key-size 512 --hash sha256 --iter-time 5000 --type luks2 "/dev/${lvm_partition}"
     echo -e "\nTrying to decrypt the LVM encrypted partition now.\n"
     echo "${lvm_password}" | ykfde-open -d "/dev/${lvm_partition}" -n cryptlvm
     set +e
@@ -105,7 +105,7 @@ prepare_boot_password() {
     echo "For encrypting the boot partition, a password is required."
     read -p "Do you want to use the same password as for the LVM partition [Y/n]: " confirm
 
-    if [[ $confirm == [nN] || $confirm == [nN][eE][sS] ]]; then
+    if [[ $confirm == [yY] || $confirm == [yY][eE][sS] ]]; then
         boot_password=${lvm_password}
         boot_password_repeated=${boot_password}
     fi
@@ -120,7 +120,7 @@ prepare_boot_password() {
 }
 
 prepare_boot_partition() {
-    partitions=($(lsblk -l | sed -n "s/\(${disk}[^ ]*\).* part.*/\1/p"))
+    partitions=($(lsblk -l -x NAME | sed -n "s/\(${disk}[^ ]*\).* part.*/\1/p"))
     # Format EFI partition as fat32 
     mkfs.fat -F32 "/dev/${partitions[0]}"
     # Configure encryption for boot partition and format as ext4
