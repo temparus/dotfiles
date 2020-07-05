@@ -16,7 +16,7 @@ install_base_system() {
     # Install YubiKey software
     pacstrap /mnt yubikey-manager pcsc-tools cryptsetup
     # Install other basic packages
-    pacstrap /mnt vim git sudo man-db man-pages iproute2 networkmanager exfat-utils ntfs-3g
+    pacstrap /mnt vim git sudo man-db man-pages iproute2 networkmanager exfat-utils ntfs-3g docker
 }
 
 generate_fstab() {

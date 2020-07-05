@@ -17,13 +17,13 @@ create_partitions() {
     local disk=$1
 
     # Partitions:
-    # * efi:  fat32, size:  32MB
-    # * boot:  ext4, size: 550MB
+    # * efi:  fat32, size: ~32MiB
+    # * boot:  ext4, size: 550MiB
     # * lvm:   ----, size: 100%FREE
-    parted /dev/$disk mklabel gpt
-    parted /dev/$disk mkpart "efi" fat32 2048 32002048
-    parted /dev/$disk mkpart "boot" ext4 32002048 582002048
-    parted /dev/$disk mkpart "lvm" ext4 582002048 100%
+    parted --script /dev/$disk mklabel gpt
+    parted --script /dev/$disk mkpart "efi" fat32 2048s 34MiB
+    parted --script /dev/$disk mkpart "boot" ext4 34MiB 584MiB
+    parted --script /dev/$disk mkpart "lvm" ext4 582MiB 100%
 }
 
 install_encryption_toolset() {
