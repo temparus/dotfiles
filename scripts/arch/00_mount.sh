@@ -40,10 +40,10 @@ decrypt_partitions() {
 }
 
 mount_partitions() {
-    mount "/dev/${vol_group}-root" /mnt
+    mount "/dev/mapper/${vol_group}-root" /mnt
     mount /dev/mapper/cryptboot /mnt/boot
     mount "/dev/${partitions[0]}" /mnt/boot/efi
-    swapon "/dev/${vol_group}-swap"
+    swapon "/dev/mapper/${vol_group}-swap"
 }
 
 
