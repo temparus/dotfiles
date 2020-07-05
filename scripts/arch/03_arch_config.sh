@@ -9,7 +9,10 @@
 
 # ATTENTION! This file must be executed within a chroot environment!
 
-source ../helpers.sh
+# Relative path from the working directory to the script location.
+DIR=$(dirname "${BASH_SOURCE[0]}")
+
+source "${DIR}/../helpers.sh"
 
 # Static configuration options
 vol_group="ArchVolGroup"
@@ -129,10 +132,6 @@ install_yay() {
         rm -r /tmp/yay
     fi
 }
-
-
-# Relative path from the working directory to the script location.
-DIR=$(dirname "${BASH_SOURCE[0]}")
 
 echo "=================================="
 echo -e "Step 03: Arch Linux Configuration\n"
