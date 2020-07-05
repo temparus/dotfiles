@@ -99,9 +99,10 @@ create_admin_user() {
 }
 
 configure_secure_boot() {
-    pacman --noconfirm -Sy binutils fakeroot
+    pacman --noconfirm -Sy binutils fakeroot efitools sbsigntools
     sudo -u nobody /usr/bin/bash -c "curl -L https://github.com/xmikos/cryptboot/archive/master.zip | bsdtar -xvf - -C /tmp"
     sudo -u nobody /usr/bin/bash -c "cd /tmp/cryptboot-master && makepkg --skipchecksums"
+    pacman -U /tmp/cryptboot/cryptboot*.pkg.tar.xz
     rm -r /tmp/cryptboot-master
 
     cryptboot-efikeys create
@@ -129,6 +130,7 @@ install_yay() {
         pacman --noconfirm -Sy fakeroot binutils make sudo git pkgconf go
         sudo -u nobody /usr/bin/bash -c "git clone https://aur.archlinux.org/yay.git /tmp/yay"
         sudo -u nobody /usr/bin/bash -c "cd /tmp/yay && makepkg"
+        pacman -U /tmp/yay/yay*.pkg.tar.xz
         rm -r /tmp/yay
     fi
 }
