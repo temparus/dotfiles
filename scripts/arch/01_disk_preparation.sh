@@ -92,7 +92,7 @@ create_encrypted_lvm_partition() {
     set -e
     lvm_partition="${partitions[${#partitions[@]} - 1]}"
     echo 
-    echo "${lvm_password}" | ykfde-format -q --cipher aes-xts-plain64 --key-size 512 --hash sha256 --iter-time 5000 --type luks2 "/dev/${lvm_partition}"
+    echo -e "${lvm_password}\n${lvm_password}" | ykfde-format --cipher aes-xts-plain64 --key-size 512 --hash sha256 --iter-time 5000 --type luks2 "/dev/${lvm_partition}"
     echo -e "\nTrying to decrypt the LVM encrypted partition now.\n"
     echo "${lvm_password}" | ykfde-open -d "/dev/${lvm_partition}" -n cryptlvm
     set +e
