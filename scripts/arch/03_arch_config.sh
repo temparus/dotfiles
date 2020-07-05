@@ -100,9 +100,9 @@ create_admin_user() {
 
 configure_secure_boot() {
     pacman --noconfirm -Sy binutils fakeroot
-    sudo -u nobody curl -L https://github.com/xmikos/cryptboot/archive/master.zip | bsdtar -xvf - -C .
-    sudo -u nobody /bin/bash -c "cd cryptboot-master && makepkg --skipchecksums"
-    rm -r cryptboot-master
+    sudo -u nobody curl -L https://github.com/xmikos/cryptboot/archive/master.zip | bsdtar -xvf - -C /tmp
+    sudo -u nobody /bin/bash -c "cd /tmp/cryptboot-master && makepkg --skipchecksums"
+    rm -r /tmp/cryptboot-master
 
     cryptboot-efikeys create
     cryptboot-efikeys enroll
