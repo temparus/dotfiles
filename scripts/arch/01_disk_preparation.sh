@@ -52,11 +52,11 @@ create_volumes() {
     lvcreate -L $swap_size $vol_group -n swap
     lvcreate -l 100%FREE $vol_group -n root
 
-    mkfs.ext4 "/dev/${vol_group}-root"
-    mkswap "/dev/${vol_group}-swap"
+    mkfs.ext4 "/dev/mapper/${vol_group}-root"
+    mkswap "/dev/mapper/${vol_group}-swap"
 
-    mount "/dev/${vol_group}-root" /mnt
-    swapon "/dev/${vol_group}-swap"
+    mount "/dev/mapper/${vol_group}-root" /mnt
+    swapon "/dev/mapper/${vol_group}-swap"
 }
 
 prepare_boot_partition() {
