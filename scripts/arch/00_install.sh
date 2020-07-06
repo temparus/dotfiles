@@ -18,7 +18,7 @@ printf "Welcome to the installation script for ${UNDERLINE}${BOLD}Arch Linux${NC
 task "Updating local clock" timedatectl set-ntp true
 
 set -e
-$DIR/01_disk_preparation.sh
-$DIR/02_arch_install.sh
+source "${DIR}/01_disk_preparation.sh"
+source "${DIR}/02_arch_install.sh"
 arch-chroot /mnt /usr/bin/bash -c /home/arch/03_arch_config.sh
-$DIR/04_arch_cleanup.sh
+source "${DIR}/04_arch_cleanup.sh"

@@ -13,9 +13,8 @@
 DIR=$(dirname "${BASH_SOURCE[0]}")
 
 source "${DIR}/../helpers.sh"
+source "${DIR}/.helpers_disk/00_disk.sh"
 
-# Static configuration options
-vol_group="ArchVolGroup"
 
 # Functions
 install_encryption_toolset() {
@@ -71,20 +70,27 @@ rebuild_initramfs() {
 }
 
 install_grub_bootloader() {
+    request_disk
+    request_lvm_partition
+    request_root_partition
+    request_swap_partition
+
     pacman --noconfirm -Sy grub
 
-    lvm_uuid=$(blkid | sed -n "/\/dev\/${partitions[${#partitions[@]} - 1]}/s/.* UUID=\"\([^\"]*\)\".*/\1/p")
-    root_uuid=$(blkid | sed -n "/\/dev\/mapper\/${vol_group}-root/s/.* UUID=\"\([^\"]*\)\".*/\1/p")
-    swap_uuid=$(blkid | sed -n "/\/dev\/mapper\/${vol_group}-swap/s/.* UUID=\"\([^\"]*\)\".*/\1/p")
-
-    echo "GRUB_CMDLINE_LINUX=\"UUID=${lvm_uuid}:cryptlvm root=UUID=${root_uuid} resume=UUID=${swap_uuid}\"" >> /etc/default/grub
+    if [ -z $no_swap ]; then
+        echo "GRUB_CMDLINE_LINUX=\"UUID=${lvm_partition_uuid}:cryptlvm root=UUID=${root_partition_uuid} resume=UUID=${swap_partition_uuid}\"" >> /etc/default/grub
+    else
+        echo "GRUB_CMDLINE_LINUX=\"UUID=${lvm_partition_uuid}:cryptlvm root=UUID=${root_partition_uuid}\"" >> /etc/default/grub
+    fi
     echo "GRUB_ENABLE_CRYPTODISK=y" >> /etc/default/grub
 
     grub-install --target=x86_64-efi --efi-directory=/boot/efi --bootloader-id=arch --recheck
     grub-mkconfig -o /boot/grub/grub.cfg
 
-    sed -i "s/#YKFDE_LUKS_NAME=\".*\"/YKFDE_LUKS_NAME=\"cryptlvm\"/g" /etc/ykfde.conf
-    sed -i "s/#YKFDE_DISK_UUID=\".*\"/YKFDE_DISK_UUID=\"${lvm_uuid}\"/g" /etc/ykfde.conf
+    if [ -e /etc/ykfde.conf ]; then
+        sed -i "s/#YKFDE_LUKS_NAME=\".*\"/YKFDE_LUKS_NAME=\"cryptlvm\"/g" /etc/ykfde.conf
+        sed -i "s/#YKFDE_DISK_UUID=\".*\"/YKFDE_DISK_UUID=\"${lvm_uuid}\"/g" /etc/ykfde.conf
+    fi
 }
 
 create_admin_user() {
@@ -95,15 +101,21 @@ create_admin_user() {
     passwd $username
     groupadd sudo
     usermod -a -G sudo $username
-    sed -i "s/# %sudo .*/%sudo ALL=(ALL) ALL/g" /etc/sudoers
+    sed -i "s/#\ %sudo.*/%sudo ALL=(ALL) ALL/g" /etc/sudoers
 }
 
 configure_secure_boot() {
     pacman --noconfirm -Sy binutils fakeroot efitools sbsigntools
     sudo -u nobody /usr/bin/bash -c "curl -L https://github.com/xmikos/cryptboot/archive/master.zip | bsdtar -xvf - -C /tmp"
     sudo -u nobody /usr/bin/bash -c "cd /tmp/cryptboot-master && makepkg --skipchecksums"
-    pacman -U /tmp/cryptboot/cryptboot*.pkg.tar.xz
+    pacman -U /tmp/cryptboot-master/cryptboot*.pkg.tar.xz
     rm -r /tmp/cryptboot-master
+
+    sed -i "s/EFI_ID_GRUB=\".*\"/EFI_ID_GRUB=\"arch\"/g" /etc/cryptboot.conf
+    sed -i "s/EFI_PATH_GRUB=\".*\"/EFI_PATH_GRUB=\"EFI/arch/grubx64.efi\"/g" /etc/cryptboot.conf
+
+    # TODO: add cryptboot to /etc/crypttab!
+    "" >> /etc/crypttab
 
     cryptboot-efikeys create
     cryptboot-efikeys enroll

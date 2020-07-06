@@ -14,9 +14,9 @@ source "${DIR}/../helpers.sh"
 
 # Functions
 remove_arch_config_script() {
-    rm -r /mnt/home/arch
-    rm /mnt/home/helpers.sh
-    rm ykfde.conf
+    rm -rf /mnt/home/arch
+    rm -f /mnt/home/helpers.sh
+    rm -f /mnt/home/ykfde.conf
 }
 
 echo "=================================="

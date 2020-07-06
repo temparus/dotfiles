@@ -19,7 +19,7 @@ install_base_system() {
     # Install YubiKey software
     pacstrap /mnt yubikey-manager pcsc-tools cryptsetup
     # Install other basic packages
-    pacstrap /mnt vim git sudo man-db man-pages iproute2 networkmanager exfat-utils ntfs-3g docker
+    pacstrap /mnt vim git sudo man-db man-pages iproute2 networkmanager btrfs-progs exfat-utils ntfs-3g docker
 }
 
 generate_fstab() {
@@ -37,9 +37,10 @@ copy_encryption_toolset_config() {
 }
 
 copy_arch_config_script() {
-    mkdir /mnt/home/arch
+    mkdir -p /mnt/home/arch/.helpers_disk
     cp "${DIR}/03_arch_config.sh" /mnt/home/arch
-    cp "$DIR/../helper.sh" /mnt/home
+    cp "${DIR}/../helper.sh" /mnt/home
+    cp "${DIR}/.helpers_disk/00_disk.sh" /mnt/home/arch/.helpers_disk
 }
 
 copy_files() {
