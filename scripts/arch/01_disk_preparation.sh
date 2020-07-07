@@ -32,7 +32,7 @@ create_partitions() {
 
 ask_create_swap() {
     read -p "Do you need a swap partition? [Y/n]: " confirm
-    if [[ $confirm == [nN] ] || $confirm == [nN][oO] ]]; then
+    if [[ $confirm == [nN] || $confirm == [nN][oO] ]]; then
         no_swap="y"
     else
         unset no_swap
