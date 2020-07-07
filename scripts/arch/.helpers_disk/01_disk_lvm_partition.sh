@@ -120,6 +120,7 @@ decrypt_lvm_partition() {
         printf "\n${RED}ERROR${NC} Failed to decrypt lvm partition. Please try again.\n\n"
         unset lvm_password
         unset lvm_partition_yubikey
+        decrypt_lvm_partition
     fi
 }
 
