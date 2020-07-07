@@ -62,7 +62,7 @@ create_volumes() {
     fi
 
     lvcreate -l 100%FREE $LVM_VOL_GROUP -n root
-    if [ root_partition_type == "btrfs" ]; then
+    if [ $root_partition_type == "btrfs" ]; then
         mkfs.btrfs -L arch "/dev/mapper/${LVM_VOL_GROUP}-root"
         mkdir -p /mnt/btrfs
         mount -t btrfs "/dev/mapper/${LVM_VOL_GROUP}-root" /mnt/btrfs
