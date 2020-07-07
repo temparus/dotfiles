@@ -71,7 +71,7 @@ create_encrypted_boot_partition_cryptsetup() {
 
 decrypt_boot_partition() {
     request_boot_partition
-    request_new_boot_password
+    request_boot_password
     set -e
     echo "${boot_password}" | cryptsetup open "/dev/${boot_partition}" "${CRYPT_MAPPER_BOOT}"
     set +e
