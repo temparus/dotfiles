@@ -72,7 +72,10 @@ create_encrypted_boot_partition_cryptsetup() {
 decrypt_boot_partition() {
     request_boot_partition
     request_boot_password
-    set -e
     echo "${boot_password}" | cryptsetup open "/dev/${boot_partition}" "${CRYPT_MAPPER_BOOT}"
-    set +e
+
+    if [ $? -ne 0 ]; then
+        printf "\n${RED}ERROR${NC} Failed to decrypt boot partition. Please try again.\n\n"
+        unset boot_password
+    fi
 }

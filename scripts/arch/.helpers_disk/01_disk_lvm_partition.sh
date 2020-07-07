@@ -115,14 +115,18 @@ decrypt_lvm_partition() {
     else
         decrypt_yubikey_lvm_partition
     fi
+
+    if [ $? -ne 0 ]; then
+        printf "\n${RED}ERROR${NC} Failed to decrypt lvm partition. Please try again.\n\n"
+        unset lvm_password
+        unset lvm_partition_yubikey
+    fi
 }
 
 decrypt_normal_lvm_partition() {
     request_lvm_partition
     request_lvm_password
-    set -e
     echo "${lvm_password}" | cryptsetup open "/dev/${lvm_partition}" "${CRYPT_MAPPER_BOOT}"
-    set +e
 }
 
 decrypt_yubikey_lvm_partition() {
@@ -132,7 +136,5 @@ decrypt_yubikey_lvm_partition() {
 
     request_lvm_partition
     request_lvm_password
-    set -e
     echo "${lvm_password}" | ykfde-open -d "/dev/${lvm_partition}" -n "${CRYPT_MAPPER_LVM}"
-    set +e
 }
