@@ -45,10 +45,10 @@ request_boot_password() {
 
         if [[ $confirm == [yY] || $confirm == [yY][eE][sS] ]]; then
             boot_password=${lvm_password}
+        else
+        	read -sp " > Enter password: " boot_password
+            echo ""
         fi
-
-        read -sp " > Enter password: " boot_password
-        echo ""
     fi
 }
 
