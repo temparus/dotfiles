@@ -125,7 +125,7 @@ mount_partitions() {
 }
 
 mount_lvm_volumes() {
-    if [ root_partition_type == "btrfs" ]; then
+    if [ $root_partition_type == "btrfs" ]; then
         mount -o noatime,ssd,compress=lzo subvol=/root "/dev/mapper/${LVM_VOL_GROUP}-root" /mnt
         mkdir -p /mnt/home
         mount -o noatime,ssd,compress=lzo subvol=/home "/dev/mapper/${LVM_VOL_GROUP}-root" /mnt/home
