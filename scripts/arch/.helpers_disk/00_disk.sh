@@ -65,7 +65,7 @@ request_boot_partition() {
     request_disk   
     local boot_partition_data=($(request_partition "boot"))
 
-    if [ -z $lvm_partition_data ]; then
+    if [ -z $boot_partition_data ]; then
         printf "${RED}ERROR${NC}: Boot partition not found on disk ${disk}!\n"
         exit 1
     fi
@@ -78,7 +78,7 @@ request_efi_partition() {
     request_disk   
     local efi_partition_data=($(request_partition "efi"))
 
-    if [ -z $lvm_partition_data ]; then
+    if [ -z $efi_partition_data ]; then
         printf "${RED}ERROR${NC}: EFI partition not found on disk ${disk}!\n"
         exit 1
     fi
@@ -89,7 +89,7 @@ request_efi_partition() {
 
 request_root_partition() {
     request_disk   
-    root_partition_data=($(request_lvm_partition "root"))
+    root_partition_data=($(request_lvm_volume "root"))
 
     if [ -z $root_partition_uuid ]; then
         printf "${RED}ERROR${NC}: root partition not found on LVM Volume ${LVM_VOL_GROUP}!\n"
@@ -102,7 +102,7 @@ request_root_partition() {
 
 request_swap_partition() {
     request_disk   
-    swap_partition_data=($(request_lvm_partition "swap"))
+    swap_partition_data=($(request_lvm_volume "swap"))
     swap_partition_uuid="${swap_partition_data[0]}"
 
     if [ -z $swap_partition_uuid ]; then
@@ -124,8 +124,13 @@ mount_partitions() {
     mount_efi_boot_partitions
 }
 
+unmount_partitions() {
+    unmount_lvm_volumes
+    unmount_efi_boot_partitions
+}
+
 mount_lvm_volumes() {
-    if [ root_partition_type == "btrfs" ]; then
+    if [ $root_partition_type == "btrfs" ]; then
         mount -o noatime,ssd,compress=lzo subvol=/root "/dev/mapper/${LVM_VOL_GROUP}-root" /mnt
         mkdir -p /mnt/home
         mount -o noatime,ssd,compress=lzo subvol=/home "/dev/mapper/${LVM_VOL_GROUP}-root" /mnt/home
@@ -146,6 +151,25 @@ mount_lvm_volumes() {
     fi
 }
 
+unmount_lvm_volumes() {
+    if [ $root_partition_type == "btrfs" ]; then
+        umount /mnt/var/log
+        umount /mnt/var/cache
+        umount /mnt/var/tmp
+        umount /mnt/.snapshots
+        umount /mnt/home
+        umount /mnt
+    else
+        umount /mnt
+    fi
+
+    cryptsetup close "${LVM_VOL_GROUP}-root"
+    if [ -z $no_swap ]; then
+        cryptsetup close "${LVM_VOL_GROUP}-swap"
+    fi
+    cryptsetup close "${CRYPT_MAPPER_LVM}"
+}
+
 mount_efi_boot_partitions() {
     request_efi_partition
     mkdir -p /mnt/boot
@@ -154,12 +178,18 @@ mount_efi_boot_partitions() {
     mount "/dev/${efi_partition}" /mnt/boot/efi
 }
 
+unmount_efi_boot_partitions() {
+    umount /mnt/boot/efi
+    umount /mnt/boot
+    cryptsetup close "${CRYPT_MAPPER_BOOT}"
+}
+
 
 # Private functions below
 request_partition() {
     blkid -t PARTLABEL="${1}" | sed -n "/\/dev\/${disk}/s/\/dev\/\([^:]*\).* UUID=\"\([^\"]*\)\".*/\1 \2/p"
 }
 
-request_lvm_partition() {
+request_lvm_volume() {
     blkid | sed -n "/\/dev\/mapper\/${LVM_VOL_GROUP}-${1}/s/.* UUID=\"\([^\"]*\)\".* TYPE=\"\([^\"]*\)\".*/\1 \2/p"
 }

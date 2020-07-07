@@ -21,18 +21,17 @@ request_new_boot_password() {
         echo "For encrypting the boot partition, a password is required."
         read -p "Do you want to use the same password as for the LVM partition [Y/n]: " confirm
 
-        if [[ $confirm == [yY] || $confirm == [yY][eE][sS] ]]; then
+        if [[ $confirm == [nN] || $confirm == [nN][oO] ]]; then
+            while [[ "$boot_password" != "$boot_password_repeated" ]]
+            do
+                read -sp " > Enter password: " boot_password
+                echo ""
+                read -sp " > Repeat password: " boot_password_repeated
+                echo ""
+            done
+        else
             boot_password=${lvm_password}
-            boot_password_repeated=${boot_password}
         fi
-
-        while [[ "$boot_password" != "$boot_password_repeated" ]]
-        do
-            read -sp " > Enter password: " boot_password
-            echo ""
-            read -sp " > Repeat password: " boot_password_repeated
-            echo ""
-        done
     fi
 }
 
@@ -45,10 +44,10 @@ request_boot_password() {
 
         if [[ $confirm == [yY] || $confirm == [yY][eE][sS] ]]; then
             boot_password=${lvm_password}
+        else
+        	read -sp " > Enter password: " boot_password
+            echo ""
         fi
-
-        read -sp " > Enter password: " boot_password
-        echo ""
     fi
 }
 
@@ -71,8 +70,11 @@ create_encrypted_boot_partition_cryptsetup() {
 
 decrypt_boot_partition() {
     request_boot_partition
-    request_new_boot_password
-    set -e
+    request_boot_password
     echo "${boot_password}" | cryptsetup open "/dev/${boot_partition}" "${CRYPT_MAPPER_BOOT}"
-    set +e
+
+    if [ $? -ne 0 ]; then
+        printf "\n${RED}ERROR${NC} Failed to decrypt boot partition. Please try again.\n\n"
+        unset boot_password
+    fi
 }

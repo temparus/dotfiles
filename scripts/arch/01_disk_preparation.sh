@@ -12,7 +12,7 @@ DIR=$(dirname "${BASH_SOURCE[0]}")
 
 source "${DIR}/../helpers.sh"
 source "${DIR}/.helpers_disk/00_disk.sh"
-source "${DIR}/.helpers_disk/01_lvm_partition.sh"
+source "${DIR}/.helpers_disk/01_disk_lvm_partition.sh"
 source "${DIR}/.helpers_disk/02_disk_boot_partition.sh"
 
 
@@ -32,7 +32,7 @@ create_partitions() {
 
 ask_create_swap() {
     read -p "Do you need a swap partition? [Y/n]: " confirm
-    if [[ ! $confirm == [nN] ]]; then
+    if [[ $confirm == [nN] || $confirm == [nN][oO] ]]; then
         no_swap="y"
     else
         unset no_swap
@@ -41,10 +41,10 @@ ask_create_swap() {
 
 ask_root_fs_type() {
     read -p "Which file system do you want for the root partition? [BTRFS/ext4]: " fs_type
-    if [[ $fs_type -ne "ext4" ]]; then
-        root_partition_type="btrfs"
-    else
+    if [[ "$fs_type" == "ext4" ]]; then
         root_partition_type="ext4"
+    else
+        root_partition_type="btrfs"
     fi
 }
 
@@ -62,7 +62,7 @@ create_volumes() {
     fi
 
     lvcreate -l 100%FREE $LVM_VOL_GROUP -n root
-    if [ root_partition_type == "btrfs" ]; then
+    if [[ "$root_partition_type" == "btrfs" ]]; then
         mkfs.btrfs -L arch "/dev/mapper/${LVM_VOL_GROUP}-root"
         mkdir -p /mnt/btrfs
         mount -t btrfs "/dev/mapper/${LVM_VOL_GROUP}-root" /mnt/btrfs
@@ -70,9 +70,7 @@ create_volumes() {
         btrfs subvolume create home
         btrfs subvolume create root
         btrfs subvolume create snapshots
-        mkdir -p ./root/var/log
-        mkdir -p ./root/var/tmp
-        mkdir -p ./root/var/cache
+        mkdir -p ./root/var
         btrfs subvolume create ./root/var/log
         btrfs subvolume create ./root/var/tmp
         btrfs subvolume create ./root/var/cache

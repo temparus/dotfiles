@@ -87,7 +87,7 @@ create_encrypted_normal_lvm_partition() {
 }
 
 create_encrypted_yubikey_lvm_partition() {
-    if [ ! -e $(which ykfde-open) ]; then
+    if [ ! -e /usr/bin/ykfde-format ]; then
         task "Installing disk encryption toolset" install_yubikey_encryption_toolset
     fi
 
@@ -115,24 +115,26 @@ decrypt_lvm_partition() {
     else
         decrypt_yubikey_lvm_partition
     fi
+
+    if [ $? -ne 0 ]; then
+        printf "\n${RED}ERROR${NC} Failed to decrypt lvm partition. Please try again.\n\n"
+        unset lvm_password
+        decrypt_lvm_partition
+    fi
 }
 
 decrypt_normal_lvm_partition() {
     request_lvm_partition
     request_lvm_password
-    set -e
     echo "${lvm_password}" | cryptsetup open "/dev/${lvm_partition}" "${CRYPT_MAPPER_BOOT}"
-    set +e
 }
 
 decrypt_yubikey_lvm_partition() {
-    if [ ! -e $(which ykfde-open) ]; then
+    if [ ! -e /usr/bin/ykfde-open ]; then
         task "Installing disk encryption toolset" install_yubikey_encryption_toolset
     fi
 
     request_lvm_partition
     request_lvm_password
-    set -e
     echo "${lvm_password}" | ykfde-open -d "/dev/${lvm_partition}" -n "${CRYPT_MAPPER_LVM}"
-    set +e
 }
