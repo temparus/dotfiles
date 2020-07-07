@@ -37,7 +37,7 @@ ask_lvm_encryption_type() {
     fi
 }
 
-request_lvm_password() {
+request_new_lvm_password() {
     if [ -z $lvm_password ]; then
         lvm_password=""
         local lvm_password_repeated="1"
@@ -54,10 +54,19 @@ request_lvm_password() {
     fi
 }
 
+request_lvm_password() {
+    if [ -z $lvm_password ]; then
+        echo "For decrypting the LVM partition, a password is required."
+
+        read -sp " > Enter password: " lvm_password
+        echo ""
+    fi
+}
+
 create_encrypted_lvm_partition() {
     ask_lvm_encryption_type
     request_lvm_partition
-    prepare_lvm_password
+    request_new_lvm_password
 
     if [ -z $lvm_partition_yubikey ]; then
         create_encrypted_normal_lvm_partition
@@ -120,6 +129,7 @@ decrypt_yubikey_lvm_partition() {
     if [ ! -e $(which ykfde-open) ]; then
         task "Installing disk encryption toolset" install_yubikey_encryption_toolset
     fi
+
     request_lvm_partition
     request_lvm_password
     set -e
