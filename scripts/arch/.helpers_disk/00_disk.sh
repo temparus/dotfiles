@@ -89,7 +89,7 @@ request_efi_partition() {
 
 request_root_partition() {
     request_disk   
-    root_partition_data=($(request_lvm_partition "root"))
+    root_partition_data=($(request_lvm_volume "root"))
 
     if [ -z $root_partition_uuid ]; then
         printf "${RED}ERROR${NC}: root partition not found on LVM Volume ${LVM_VOL_GROUP}!\n"
@@ -102,7 +102,7 @@ request_root_partition() {
 
 request_swap_partition() {
     request_disk   
-    swap_partition_data=($(request_lvm_partition "swap"))
+    swap_partition_data=($(request_lvm_volume "swap"))
     swap_partition_uuid="${swap_partition_data[0]}"
 
     if [ -z $swap_partition_uuid ]; then
@@ -160,6 +160,6 @@ request_partition() {
     blkid -t PARTLABEL="${1}" | sed -n "/\/dev\/${disk}/s/\/dev\/\([^:]*\).* UUID=\"\([^\"]*\)\".*/\1 \2/p"
 }
 
-request_lvm_partition() {
+request_lvm_volume() {
     blkid | sed -n "/\/dev\/mapper\/${LVM_VOL_GROUP}-${1}/s/.* UUID=\"\([^\"]*\)\".* TYPE=\"\([^\"]*\)\".*/\1 \2/p"
 }
