@@ -124,20 +124,20 @@ unmount_partitions() {
 }
 
 mount_lvm_volumes() {
-    if [ "$root_partition_type" == "btrfs" ]; then
-        mount -o noatime,ssd,compress=lzo subvol=/root "/dev/mapper/${LVM_VOL_GROUP}-root" /mnt
-        mkdir -p /mnt/home
-        mount -o noatime,ssd,compress=lzo subvol=/home "/dev/mapper/${LVM_VOL_GROUP}-root" /mnt/home
-        mkdir -p /mnt/var/log
-        mount -o nodatacow,noatime,ssd,compress=lzo subvol=/var/log "/dev/mapper/${LVM_VOL_GROUP}-root" /mnt/var/log
-        mkdir -p /mnt/var/cache
-        mount -o nodatacow,noatime,ssd,compress=lzo subvol=/var/cache "/dev/mapper/${LVM_VOL_GROUP}-root" /mnt/var/cache
-        mkdir -p /mnt/var/tmp
-        mount -o nodatacow,noatime,ssd,compress=lzo subvol=/var/tmp "/dev/mapper/${LVM_VOL_GROUP}-root" /mnt/var/tmp
-        mkdir -p /mnt/.snapshots
-        mount -o noatime,ssd,compress=lzo subvol=/snapshots "/dev/mapper/${LVM_VOL_GROUP}-root" /mnt/.snapshots
-    else
+    if [ "$root_partition_type" == "ext4" ]; then
         mount "/dev/mapper/${LVM_VOL_GROUP}-root" /mnt
+    else
+        mount -o noatime,ssd,compress=lzo,subvol=/root "/dev/mapper/${LVM_VOL_GROUP}-root" /mnt
+        mkdir -p /mnt/home
+        mount -o noatime,ssd,compress=lzo,subvol=/home "/dev/mapper/${LVM_VOL_GROUP}-root" /mnt/home
+        mkdir -p /mnt/var/log
+        mount -o nodatacow,noatime,ssd,compress=lzo,subvol=/var/log "/dev/mapper/${LVM_VOL_GROUP}-root" /mnt/var/log
+        mkdir -p /mnt/var/cache
+        mount -o nodatacow,noatime,ssd,compress=lzo,subvol=/var/cache "/dev/mapper/${LVM_VOL_GROUP}-root" /mnt/var/cache
+        mkdir -p /mnt/var/tmp
+        mount -o nodatacow,noatime,ssd,compress=lzo,subvol=/var/tmp "/dev/mapper/${LVM_VOL_GROUP}-root" /mnt/var/tmp
+        mkdir -p /mnt/.snapshots
+        mount -o noatime,ssd,compress=lzo,subvol=/snapshots "/dev/mapper/${LVM_VOL_GROUP}-root" /mnt/.snapshots
     fi
 
     if [ -z $no_swap ]; then
@@ -146,19 +146,20 @@ mount_lvm_volumes() {
 }
 
 unmount_lvm_volumes() {
-    if [ "$root_partition_type" == "btrfs" ]; then
+    if [ "$root_partition_type" == "ext4" ]; then
+        umount /mnt
+    else
         umount /mnt/var/log
         umount /mnt/var/cache
         umount /mnt/var/tmp
         umount /mnt/.snapshots
         umount /mnt/home
         umount /mnt
-    else
-        umount /mnt
     fi
 
     cryptsetup close "${LVM_VOL_GROUP}-root"
     if [ -z $no_swap ]; then
+        swapoff "/dev/mapper/${LVM_VOL_GROUP}-swap"
         cryptsetup close "${LVM_VOL_GROUP}-swap"
     fi
     cryptsetup close "${CRYPT_MAPPER_LVM}"
