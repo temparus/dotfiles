@@ -41,10 +41,10 @@ ask_create_swap() {
 
 ask_root_fs_type() {
     read -p "Which file system do you want for the root partition? [BTRFS/ext4]: " fs_type
-    if [[ $fs_type -ne "ext4" ]]; then
-        root_partition_type="btrfs"
-    else
+    if [[ $fs_type -eq "ext4" ]]; then
         root_partition_type="ext4"
+    else
+        root_partition_type="btrfs"
     fi
 }
 
