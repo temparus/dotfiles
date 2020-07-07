@@ -21,7 +21,7 @@ echo -e "Special: Mount encrypted drives\n"
 printf "${YELLOW}ATTENTION${NC}: Have vour passwords and YubiKey ready.\n"
 
 request_disk
-decrypt_boot_partition
 ask_lvm_encryption_type
 decrypt_lvm_partition
+decrypt_boot_partition
 task "Mounting partitions" mount_partitions
