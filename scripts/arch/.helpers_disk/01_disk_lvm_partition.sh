@@ -87,7 +87,7 @@ create_encrypted_normal_lvm_partition() {
 }
 
 create_encrypted_yubikey_lvm_partition() {
-    if [ ! -e $(which ykfde-open) ]; then
+    if [ ! -e/usr/bin/ykfde-format ]; then
         task "Installing disk encryption toolset" install_yubikey_encryption_toolset
     fi
 
@@ -126,7 +126,7 @@ decrypt_normal_lvm_partition() {
 }
 
 decrypt_yubikey_lvm_partition() {
-    if [ ! -e $(which ykfde-open) ]; then
+    if [ ! -e /usr/bin/ykfde-open ]; then
         task "Installing disk encryption toolset" install_yubikey_encryption_toolset
     fi
 
