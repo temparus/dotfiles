@@ -65,7 +65,7 @@ request_boot_partition() {
     request_disk   
     local boot_partition_data=($(request_partition "boot"))
 
-    if [ -z $lvm_partition_data ]; then
+    if [ -z $boot_partition_data ]; then
         printf "${RED}ERROR${NC}: Boot partition not found on disk ${disk}!\n"
         exit 1
     fi
@@ -78,7 +78,7 @@ request_efi_partition() {
     request_disk   
     local efi_partition_data=($(request_partition "efi"))
 
-    if [ -z $lvm_partition_data ]; then
+    if [ -z $efi_partition_data ]; then
         printf "${RED}ERROR${NC}: EFI partition not found on disk ${disk}!\n"
         exit 1
     fi
