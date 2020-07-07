@@ -32,7 +32,7 @@ create_partitions() {
 
 ask_create_swap() {
     read -p "Do you need a swap partition? [Y/n]: " confirm
-    if [[ ! $confirm == [nN] ]]; then
+    if [[ $confirm == [nN] ] || $confirm == [nN][oO] ]]; then
         no_swap="y"
     else
         unset no_swap
@@ -41,7 +41,7 @@ ask_create_swap() {
 
 ask_root_fs_type() {
     read -p "Which file system do you want for the root partition? [BTRFS/ext4]: " fs_type
-    if [[ $fs_type -eq "ext4" ]]; then
+    if [[ "$fs_type" == "ext4" ]]; then
         root_partition_type="ext4"
     else
         root_partition_type="btrfs"
@@ -62,7 +62,7 @@ create_volumes() {
     fi
 
     lvcreate -l 100%FREE $LVM_VOL_GROUP -n root
-    if [ $root_partition_type == "btrfs" ]; then
+    if [[ "$root_partition_type" == "btrfs" ]]; then
         mkfs.btrfs -L arch "/dev/mapper/${LVM_VOL_GROUP}-root"
         mkdir -p /mnt/btrfs
         mount -t btrfs "/dev/mapper/${LVM_VOL_GROUP}-root" /mnt/btrfs
