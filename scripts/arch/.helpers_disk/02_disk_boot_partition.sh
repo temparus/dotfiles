@@ -22,7 +22,7 @@ request_new_boot_password() {
         read -p "Do you want to use the same password as for the LVM partition [Y/n]: " confirm
 
         if [[ $confirm == [yY] || $confirm == [yY][eE][sS] ]]; then
-            boot_password=${lvm_password}
+            boot_password=${boot_password}
             boot_password_repeated=${boot_password}
         fi
 
