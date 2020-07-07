@@ -49,42 +49,36 @@ request_disk() {
 }
 
 request_lvm_partition() {
-    request_disk   
-    local lvm_partition_data=($(request_partition "lvm"))
+    request_disk
+    lvm_partition=$(request_partition "lvm")
+    lvm_partition_uuid=$(request_partition_uuid "lvm")
 
-    if [ -z $lvm_partition_data ]; then
+    if [ -z $lvm_partition ]; then
         printf "${RED}ERROR${NC}: LVM partition not found on disk ${disk}!\n"
         exit 1
     fi
-
-    lvm_partition="${lvm_partition_data[0]}"
-    lvm_partition_uuid="${lvm_partition_data[1]}"
 }
 
 request_boot_partition() {
-    request_disk   
-    local boot_partition_data=($(request_partition "boot"))
+    request_disk
+    boot_partition=$(request_partition "boot")
+    boot_partition_uuid=$(request_partition_uuid "boot")
 
-    if [ -z $boot_partition_data ]; then
+    if [ -z $boot_partition ]; then
         printf "${RED}ERROR${NC}: Boot partition not found on disk ${disk}!\n"
         exit 1
     fi
-
-    boot_partition="${boot_partition_data[0]}"
-    boot_partition_uuid="${boot_partition_data[1]}"
 }
 
 request_efi_partition() {
     request_disk   
-    local efi_partition_data=($(request_partition "efi"))
+    efi_partition=$(request_partition "efi")
+    efi_partition_uuid=$(request_partition_uuid "efi")
 
-    if [ -z $efi_partition_data ]; then
+    if [ -z $efi_partition ]; then
         printf "${RED}ERROR${NC}: EFI partition not found on disk ${disk}!\n"
         exit 1
     fi
-
-    efi_partition="${efi_partition_data[0]}"
-    efi_partition_uuid="${efi_partition_data[1]}"
 }
 
 request_root_partition() {
@@ -187,7 +181,11 @@ unmount_efi_boot_partitions() {
 
 # Private functions below
 request_partition() {
-    blkid -t PARTLABEL="${1}" | sed -n "/\/dev\/${disk}/s/\/dev\/\([^:]*\).* UUID=\"\([^\"]*\)\".*/\1 \2/p"
+    blkid -t PARTLABEL="${1}" | sed -n "/\/dev\/${disk}/s/\/dev\/\([^:]*\).*/\1/p"
+}
+
+request_partition_uuid() {
+    blkid -t PARTLABEL="${1}" | sed -n "/\/dev\/${disk}/s/.* UUID=\"\([^\"]*\)\".*/\1/p"
 }
 
 request_lvm_volume() {
