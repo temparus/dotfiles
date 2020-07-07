@@ -21,18 +21,17 @@ request_new_boot_password() {
         echo "For encrypting the boot partition, a password is required."
         read -p "Do you want to use the same password as for the LVM partition [Y/n]: " confirm
 
-        if [[ $confirm == [yY] || $confirm == [yY][eE][sS] ]]; then
-            boot_password=${boot_password}
-            boot_password_repeated=${boot_password}
+        if [[ $confirm == [nN] || $confirm == [nN][oO] ]]; then
+            while [[ "$boot_password" != "$boot_password_repeated" ]]
+            do
+                read -sp " > Enter password: " boot_password
+                echo ""
+                read -sp " > Repeat password: " boot_password_repeated
+                echo ""
+            done
+        else
+            boot_password=${lvm_password}
         fi
-
-        while [[ "$boot_password" != "$boot_password_repeated" ]]
-        do
-            read -sp " > Enter password: " boot_password
-            echo ""
-            read -sp " > Repeat password: " boot_password_repeated
-            echo ""
-        done
     fi
 }
 
