@@ -58,7 +58,7 @@ create_encrypted_boot_partition() {
 
 create_encrypted_boot_partition_cryptsetup() {
     request_efi_partition
-    request_new_boot_partition
+    request_boot_partition
     # Format EFI partition as fat32 
     mkfs.fat -F32 "/dev/${efi_partition}"
     # Configure encryption for boot partition and format as ext4

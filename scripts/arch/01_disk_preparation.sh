@@ -86,6 +86,7 @@ create_volumes() {
 install_key_file_for_initramfs() {
     request_boot_password
     request_boot_partition
+    mkdir -p /mnt/etc
     dd bs=512 count=4 if=/dev/urandom of=/mnt/etc/cryptboot_keyfile.bin
     chmod 000 /mnt/etc/cryptboot_keyfile.bin
     echo "${boot_password}" | cryptsetup luksAddKey "/dev/${boot_partition}" /mnt/etc/cryptboot_keyfile.bin
