@@ -12,7 +12,7 @@ DIR=$(dirname "${BASH_SOURCE[0]}")
 
 source "${DIR}/../helpers.sh"
 source "${DIR}/.helpers_disk/00_disk.sh"
-source "${DIR}/.helpers_disk/01_lvm_partition.sh"
+source "${DIR}/.helpers_disk/01_disk_lvm_partition.sh"
 source "${DIR}/.helpers_disk/02_disk_boot_partition.sh"
 
 
