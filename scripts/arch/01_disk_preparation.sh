@@ -70,9 +70,7 @@ create_volumes() {
         btrfs subvolume create home
         btrfs subvolume create root
         btrfs subvolume create snapshots
-        mkdir -p ./root/var/log
-        mkdir -p ./root/var/tmp
-        mkdir -p ./root/var/cache
+        mkdir -p ./root/var
         btrfs subvolume create ./root/var/log
         btrfs subvolume create ./root/var/tmp
         btrfs subvolume create ./root/var/cache
