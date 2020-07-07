@@ -74,6 +74,8 @@ create_volumes() {
         btrfs subvolume create ./root/var/log
         btrfs subvolume create ./root/var/tmp
         btrfs subvolume create ./root/var/cache
+        umount /mnt/btrfs
+        rmdir /mnt/btrfs
     else
         mkfs.ext4 "/dev/mapper/${LVM_VOL_GROUP}-root"
     fi
@@ -84,9 +86,10 @@ create_volumes() {
 install_key_file_for_initramfs() {
     request_boot_password
     request_boot_partition
-    dd bs=512 count=4 if=/dev/urandom of=/mnt/crypto_keyfile.bin
-    chmod 000 /mnt/crypto_keyfile.bin
-    echo "${boot_password}" | cryptsetup luksAddKey "/dev/${boot_partition}" /mnt/crypto_keyfile.bin
+    mkdir -p /mnt/etc
+    dd bs=512 count=4 if=/dev/urandom of=/mnt/etc/cryptboot_keyfile.bin
+    chmod 000 /mnt/etc/cryptboot_keyfile.bin
+    echo "${boot_password}" | cryptsetup luksAddKey "/dev/${boot_partition}" /mnt/etc/cryptboot_keyfile.bin
 }
 
 echo "=================================="

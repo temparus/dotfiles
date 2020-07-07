@@ -49,49 +49,43 @@ request_disk() {
 }
 
 request_lvm_partition() {
-    request_disk   
-    local lvm_partition_data=($(request_partition "lvm"))
+    request_disk
+    lvm_partition=$(request_partition "lvm")
+    lvm_partition_uuid=$(request_partition_uuid "lvm")
 
-    if [ -z $lvm_partition_data ]; then
+    if [ -z $lvm_partition ]; then
         printf "${RED}ERROR${NC}: LVM partition not found on disk ${disk}!\n"
         exit 1
     fi
-
-    lvm_partition="${lvm_partition_data[0]}"
-    lvm_partition_uuid="${lvm_partition_data[1]}"
 }
 
 request_boot_partition() {
-    request_disk   
-    local boot_partition_data=($(request_partition "boot"))
+    request_disk
+    boot_partition=$(request_partition "boot")
+    boot_partition_uuid=$(request_partition_uuid "boot")
 
-    if [ -z $boot_partition_data ]; then
+    if [ -z $boot_partition ]; then
         printf "${RED}ERROR${NC}: Boot partition not found on disk ${disk}!\n"
         exit 1
     fi
-
-    boot_partition="${boot_partition_data[0]}"
-    boot_partition_uuid="${boot_partition_data[1]}"
 }
 
 request_efi_partition() {
     request_disk   
-    local efi_partition_data=($(request_partition "efi"))
+    efi_partition=$(request_partition "efi")
+    efi_partition_uuid=$(request_partition_uuid "efi")
 
-    if [ -z $efi_partition_data ]; then
+    if [ -z $efi_partition ]; then
         printf "${RED}ERROR${NC}: EFI partition not found on disk ${disk}!\n"
         exit 1
     fi
-
-    efi_partition="${efi_partition_data[0]}"
-    efi_partition_uuid="${efi_partition_data[1]}"
 }
 
 request_root_partition() {
     request_disk   
     root_partition_data=($(request_lvm_volume "root"))
 
-    if [ -z $root_partition_uuid ]; then
+    if [ -z $root_partition_data ]; then
         printf "${RED}ERROR${NC}: root partition not found on LVM Volume ${LVM_VOL_GROUP}!\n"
         exit 1
     fi
@@ -130,20 +124,14 @@ unmount_partitions() {
 }
 
 mount_lvm_volumes() {
-    if [ $root_partition_type == "btrfs" ]; then
-        mount -o noatime,ssd,compress=lzo subvol=/root "/dev/mapper/${LVM_VOL_GROUP}-root" /mnt
-        mkdir -p /mnt/home
-        mount -o noatime,ssd,compress=lzo subvol=/home "/dev/mapper/${LVM_VOL_GROUP}-root" /mnt/home
-        mkdir -p /mnt/var/log
-        mount -o nodatacow,noatime,ssd,compress=lzo subvol=/var/log "/dev/mapper/${LVM_VOL_GROUP}-root" /mnt/var/log
-        mkdir -p /mnt/var/cache
-        mount -o nodatacow,noatime,ssd,compress=lzo subvol=/var/cache "/dev/mapper/${LVM_VOL_GROUP}-root" /mnt/var/cache
-        mkdir -p /mnt/var/tmp
-        mount -o nodatacow,noatime,ssd,compress=lzo subvol=/var/tmp "/dev/mapper/${LVM_VOL_GROUP}-root" /mnt/var/tmp
-        mkdir -p /mnt/.snapshots
-        mount -o noatime,ssd,compress=lzo subvol=/snapshots "/dev/mapper/${LVM_VOL_GROUP}-root" /mnt/.snapshots
-    else
+    if [ "$root_partition_type" == "ext4" ]; then
         mount "/dev/mapper/${LVM_VOL_GROUP}-root" /mnt
+    else
+        mount -o noatime,ssd,compress=lzo,subvol=/root "/dev/mapper/${LVM_VOL_GROUP}-root" /mnt
+        mkdir -p /mnt/home
+        mount -o noatime,ssd,compress=lzo,subvol=/home "/dev/mapper/${LVM_VOL_GROUP}-root" /mnt/home
+        mkdir -p /mnt/.snapshots
+        mount -o noatime,ssd,compress=lzo,subvol=/snapshots "/dev/mapper/${LVM_VOL_GROUP}-root" /mnt/.snapshots
     fi
 
     if [ -z $no_swap ]; then
@@ -152,19 +140,17 @@ mount_lvm_volumes() {
 }
 
 unmount_lvm_volumes() {
-    if [ $root_partition_type == "btrfs" ]; then
-        umount /mnt/var/log
-        umount /mnt/var/cache
-        umount /mnt/var/tmp
-        umount /mnt/.snapshots
-        umount /mnt/home
+    if [ "$root_partition_type" == "ext4" ]; then
         umount /mnt
     else
+        umount /mnt/.snapshots
+        umount /mnt/home
         umount /mnt
     fi
 
     cryptsetup close "${LVM_VOL_GROUP}-root"
     if [ -z $no_swap ]; then
+        swapoff "/dev/mapper/${LVM_VOL_GROUP}-swap"
         cryptsetup close "${LVM_VOL_GROUP}-swap"
     fi
     cryptsetup close "${CRYPT_MAPPER_LVM}"
@@ -187,7 +173,11 @@ unmount_efi_boot_partitions() {
 
 # Private functions below
 request_partition() {
-    blkid -t PARTLABEL="${1}" | sed -n "/\/dev\/${disk}/s/\/dev\/\([^:]*\).* UUID=\"\([^\"]*\)\".*/\1 \2/p"
+    blkid -t PARTLABEL="${1}" | sed -n "/\/dev\/${disk}/s/\/dev\/\([^:]*\).*/\1/p"
+}
+
+request_partition_uuid() {
+    blkid -t PARTLABEL="${1}" | sed -n "/\/dev\/${disk}/s/.* UUID=\"\([^\"]*\)\".*/\1/p"
 }
 
 request_lvm_volume() {
