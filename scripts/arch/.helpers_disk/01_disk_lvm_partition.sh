@@ -59,7 +59,7 @@ create_encrypted_lvm_partition() {
     request_lvm_partition
     prepare_lvm_password
 
-    if [ -z lvm_partition_yubikey ]; then
+    if [ -z $lvm_partition_yubikey ]; then
         create_encrypted_normal_lvm_partition
     else
         create_encrypted_yubikey_lvm_partition
@@ -101,7 +101,7 @@ create_encrypted_yubikey_lvm_partition() {
 }
 
 decrypt_lvm_partition() {
-    if [ -z lvm_partition_yubikey ]; then
+    if [ -z $lvm_partition_yubikey ]; then
         decrypt_normal_lvm_partition
     else
         decrypt_yubikey_lvm_partition

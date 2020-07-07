@@ -31,7 +31,7 @@ LVM_VOL_GROUP="ArchVolGroup"
 
 # Stores the disk identifier in the variable "disk"
 request_disk() {
-    if [ -z disk ]; then
+    if [ -z $disk ]; then
         # Get all available disks
         disks=($(lsblk -l | sed -n 's/\([^ ]*\).* disk.*/\1/p'))
 
@@ -52,7 +52,7 @@ request_lvm_partition() {
     request_disk   
     local lvm_partition_data=($(request_partition "lvm"))
 
-    if [ -z lvm_partition_data ]; then
+    if [ -z $lvm_partition_data ]; then
         printf "${RED}ERROR${NC}: LVM partition not found on disk ${disk}!\n"
         exit 1
     fi
@@ -65,7 +65,7 @@ request_boot_partition() {
     request_disk   
     local boot_partition_data=($(request_partition "boot"))
 
-    if [ -z lvm_partition_data ]; then
+    if [ -z $lvm_partition_data ]; then
         printf "${RED}ERROR${NC}: Boot partition not found on disk ${disk}!\n"
         exit 1
     fi
@@ -78,7 +78,7 @@ request_efi_partition() {
     request_disk   
     local efi_partition_data=($(request_partition "efi"))
 
-    if [ -z lvm_partition_data ]; then
+    if [ -z $lvm_partition_data ]; then
         printf "${RED}ERROR${NC}: EFI partition not found on disk ${disk}!\n"
         exit 1
     fi
@@ -91,7 +91,7 @@ request_root_partition() {
     request_disk   
     root_partition_data=($(request_lvm_partition "root"))
 
-    if [ -z root_partition_uuid ]; then
+    if [ -z $root_partition_uuid ]; then
         printf "${RED}ERROR${NC}: root partition not found on LVM Volume ${LVM_VOL_GROUP}!\n"
         exit 1
     fi
@@ -105,7 +105,7 @@ request_swap_partition() {
     swap_partition_data=($(request_lvm_partition "swap"))
     swap_partition_uuid="${swap_partition_data[0]}"
 
-    if [ -z swap_partition_uuid ]; then
+    if [ -z $swap_partition_uuid ]; then
         printf "${YELLOW}WARNING${NC}: Swap partition not found on LVM Volume ${LVM_VOL_GROUP}!\n"
         no_swap="y"
     else
@@ -141,7 +141,7 @@ mount_lvm_volumes() {
         mount "/dev/mapper/${LVM_VOL_GROUP}-root" /mnt
     fi
 
-    if [ -z no_swap ]; then
+    if [ -z $no_swap ]; then
         swapon "/dev/mapper/${LVM_VOL_GROUP}-swap"
     fi
 }
