@@ -85,7 +85,7 @@ request_root_partition() {
     request_disk   
     root_partition_data=($(request_lvm_volume "root"))
 
-    if [ -z $root_partition_uuid ]; then
+    if [ -z $root_partition_data ]; then
         printf "${RED}ERROR${NC}: root partition not found on LVM Volume ${LVM_VOL_GROUP}!\n"
         exit 1
     fi
