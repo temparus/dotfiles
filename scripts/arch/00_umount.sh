@@ -19,4 +19,4 @@ echo "=================================="
 echo -e "Special: Unmount all drives\n"
 
 request_disk
-task "Mounting partitions" unmount_partitions
+task "Unmounting partitions" unmount_partitions
