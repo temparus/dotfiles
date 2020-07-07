@@ -124,6 +124,11 @@ mount_partitions() {
     mount_efi_boot_partitions
 }
 
+unmount_partitions() {
+    unmount_lvm_volumes
+    unmount_efi_boot_partitions
+}
+
 mount_lvm_volumes() {
     if [ $root_partition_type == "btrfs" ]; then
         mount -o noatime,ssd,compress=lzo subvol=/root "/dev/mapper/${LVM_VOL_GROUP}-root" /mnt
@@ -146,12 +151,37 @@ mount_lvm_volumes() {
     fi
 }
 
+unmount_lvm_volumes() {
+    if [ $root_partition_type == "btrfs" ]; then
+        umount /mnt/var/log
+        umount /mnt/var/cache
+        umount /mnt/var/tmp
+        umount /mnt/.snapshots
+        umount /mnt/home
+        umount /mnt
+    else
+        umount /mnt
+    fi
+
+    cryptsetup close "${LVM_VOL_GROUP}-root"
+    if [ -z $no_swap ]; then
+        cryptsetup close "${LVM_VOL_GROUP}-swap"
+    fi
+    cryptsetup close "${CRYPT_MAPPER_LVM}"
+}
+
 mount_efi_boot_partitions() {
     request_efi_partition
     mkdir -p /mnt/boot
     mount "/dev/mapper/${CRYPT_MAPPER_BOOT}" /mnt/boot
     mkdir -p /mnt/boot/efi
     mount "/dev/${efi_partition}" /mnt/boot/efi
+}
+
+unmount_efi_boot_partitions() {
+    umount /mnt/boot/efi
+    umount /mnt/boot
+    cryptsetup close "${CRYPT_MAPPER_BOOT}"
 }
 
 
