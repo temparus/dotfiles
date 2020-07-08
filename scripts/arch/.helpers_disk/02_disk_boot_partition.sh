@@ -37,16 +37,14 @@ request_new_boot_password() {
 
 request_boot_password() {
     if [ -z $boot_password ]; then
-        boot_password=""
-
         echo "For decrypting the boot partition, a password is required."
         read -p "Do you use the same password as for the LVM partition [Y/n]: " confirm
 
-        if [[ $confirm == [yY] || $confirm == [yY][eE][sS] ]]; then
-            boot_password=${lvm_password}
-        else
-        	read -sp " > Enter password: " boot_password
+        if [[ $confirm == [nN] || $confirm == [nN][oO] ]]; then
+            read -sp " > Enter password: " boot_password
             echo ""
+        else
+        	boot_password=${lvm_password}
         fi
     fi
 }
