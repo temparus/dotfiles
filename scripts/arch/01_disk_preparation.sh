@@ -83,15 +83,6 @@ create_volumes() {
     mount_lvm_volumes
 }
 
-install_key_file_for_initramfs() {
-    request_boot_password
-    request_boot_partition
-    mkdir -p /mnt/etc
-    dd bs=512 count=4 if=/dev/urandom of=/mnt/etc/cryptboot_keyfile.bin
-    chmod 000 /mnt/etc/cryptboot_keyfile.bin
-    echo "${boot_password}" | cryptsetup luksAddKey "/dev/${boot_partition}" /mnt/etc/cryptboot_keyfile.bin
-}
-
 echo "=================================="
 echo -e "Step 01: Disk Preparation\n"
 
@@ -107,4 +98,3 @@ ask_create_swap
 ask_root_fs_type
 task "Creating LVM volumes" create_volumes
 create_encrypted_boot_partition
-task "Installing a keyfile for initramfs" install_key_file_for_initramfs

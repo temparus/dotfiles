@@ -19,7 +19,9 @@ install_base_system() {
     # Install YubiKey software
     pacstrap /mnt yubikey-manager pcsc-tools cryptsetup
     # Install other basic packages
-    pacstrap /mnt vim git sudo man-db man-pages iproute2 networkmanager btrfs-progs exfat-utils ntfs-3g docker
+    pacstrap /mnt vim git sudo man-db man-pages iproute2 networkmanager \
+                  btrfs-progs exfat-utils ntfs-3g docker \
+                  pulseaudio pulseaudio-alsa pulseaudio-bluetooth pulseaudio-zeroconf pavucontrol
 }
 
 generate_fstab() {
@@ -43,6 +45,18 @@ copy_arch_config_script() {
     cp "${DIR}/.helpers_disk/00_disk.sh" /mnt/home/arch/.helpers_disk
 }
 
+install_key_file_for_initramfs() {
+    request_boot_password
+    request_boot_partition
+    mkdir -p /mnt/etc
+    dd bs=512 count=4 if=/dev/urandom of=/mnt/etc/cryptboot_keyfile.bin
+    chmod 000 /mnt/etc/cryptboot_keyfile.bin
+    echo "${boot_password}" | cryptsetup luksAddKey "/dev/${boot_partition}" /mnt/etc/cryptboot_keyfile.bin
+
+    # Add cryptboot with stored key file to /etc/crypttab
+    echo "cryptboot    UUID=${boot_partition_uuid}    /etc/cryptboot_keyfile.bin" >> /etc/crypttab
+}
+
 copy_files() {
     copy_encryption_toolset_config
     copy_arch_config_script
@@ -53,4 +67,5 @@ echo -e "Step 02: Arch Linux Installation\n"
 
 task "Installing the base system" install_base_system
 generate_fstab
+install_key_file_for_initramfs
 task "Copy files to /mnt/home" copy_files

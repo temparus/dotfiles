@@ -172,40 +172,40 @@ super + shift + q
 # VOLUME
 
 ### Mute
-#XF86AudioMute
-#	manipulate-audio toggle sinks
+XF86AudioMute
+	manipulate-audio toggle sinks
 
-#XF86AudioMicMute
-#	manipulate-audio toggle sources
+XF86AudioMicMute
+	manipulate-audio toggle sources
 
 ### Master Volume
-#XF86AudioRaiseVolume
-#	manipulate-audio '+2%'
+XF86AudioRaiseVolume
+	manipulate-audio '+2%'
 
-#super + XF86AudioRaiseVolume
-#	manipulate-audio '+10%'
+super + XF86AudioRaiseVolume
+	manipulate-audio '+10%'
 
-#XF86AudioLowerVolume
-#	manipulate-audio '-2%'
+XF86AudioLowerVolume
+	manipulate-audio '-2%'
 
-#super + XF86AudioLowerVolume
-#	~/bin/audio.sh '-10%'
+super + XF86AudioLowerVolume
+	manipulate-audio '-10%'
 
 # BRIGHTNESS
 
 # Brightness goes up
-#XF86MonBrightnessUp
-#	xbacklight -inc 5
+XF86MonBrightnessUp
+	xbacklight -inc 5
 
-#super + XF86MonBrightnessUp
-#	xbacklight -inc 20
+super + XF86MonBrightnessUp
+	xbacklight -inc 20
 
 # Brightness goes down
-#XF86MonBrightnessDown
-#	xbacklight -dec 5
+XF86MonBrightnessDown
+	xbacklight -dec 5
 
-#super + XF86MonBrightnessDown
-#	xbacklight -dec 20
+super + XF86MonBrightnessDown
+	xbacklight -dec 20
 
 # Monitor detection
 XF86Display
