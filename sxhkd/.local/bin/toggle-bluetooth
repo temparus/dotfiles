@@ -12,8 +12,6 @@ if [ $? -ne 0 ];then
 else
     bluetoothctl power off
     hciconfig $BLUETOOTH_DEVICE down
-    # bluetoothctl power off
     # /etc/init.d/bluetooth stop
     echo "bluetooth stopped!"
 fi
-

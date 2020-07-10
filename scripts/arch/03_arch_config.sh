@@ -116,9 +116,6 @@ configure_secure_boot() {
     sed -i "s/EFI_ID_GRUB=\".*\"/EFI_ID_GRUB=\"arch\"/g" /etc/cryptboot.conf
     sed -i "s/EFI_PATH_GRUB=\".*\"/EFI_PATH_GRUB=\"EFI/arch/grubx64.efi\"/g" /etc/cryptboot.conf
 
-    # Add cryptboot with stored key file to /etc/crypttab
-    echo "cryptboot    UUID=${boot_partition_uuid}    /mnt/etc/cryptboot_keyfile.bin" >> /etc/crypttab
-
     cryptboot-efikeys create
     cryptboot-efikeys enroll
     cryptboot update-grub

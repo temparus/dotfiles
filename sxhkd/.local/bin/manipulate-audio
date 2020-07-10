@@ -18,4 +18,3 @@ else
     	pactl set-sink-volume $SINK $1
     done
 fi
-
