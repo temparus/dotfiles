@@ -98,22 +98,34 @@ create_encrypted_yubikey_lvm_partition() {
     read -sp " = Press ENTER to continue. = "
     printf "\n\n"
 
-    # Add challenge to configuration file
-    # This allows a hybrid approach for decrypting the root partition:
-    #  - When the boot partition is decrypted, the stored challenge
-    #    can be used to decrypt the root partition (1FA).
-    #    The password was already provided for unlocking the boot
-    #    partition (if the same passphrase is used only!)
-    #  - When directly decrypting the root partition, the password
-    #    to build the challenge is also required (2FA).
-    ykfde_challenge=$(printf %s "$lvm_password" | sha256sum | awk '{print $1}')
-    sed -i "s/#YKFDE_CHALLENGE=\".*\"/YKFDE_CHALLENGE=\"$ykfde_challenge\"/g" /etc/ykfde.conf
-
     # Create encrypted LVM partition with Yubikey as 2nd factor
     set -e
     echo -e "${lvm_password}\n${lvm_password}" | ykfde-format --cipher aes-xts-plain64 --key-size 512 --hash sha256 --iter-time 5000 --type luks2 "/dev/${lvm_partition}"
     decrypt_yubikey_lvm_partition
     set +e
+
+    printf "\n\nIf you want to use the same password for the boot and\n"
+    printf "the lvm partition, you would have to enter the same password\n"
+    printf "twice during system boot.\n"
+    printf "When the challenge (calculated from the lvm password)\n"
+    printf "is stored in the encrypted initramfs, the password has\n"
+    printf "to be entered only once but weakens the overall encryption\n"
+    printf "strength of the lvm partition.\n\n"
+
+    read -p " > Do you want to store the challenge for the LVM partition [y/N]: " confirm
+
+    if [[ $confirm == [yY] || $confirm == [yY][eE][sS] ]]; then
+        # Add challenge to configuration file
+        # This allows a hybrid approach for decrypting the root partition:
+        #  - When the boot partition is decrypted, the stored challenge
+        #    can be used to decrypt the root partition (1FA).
+        #    The password was already provided for unlocking the boot
+        #    partition (if the same passphrase is used only!)
+        #  - When directly decrypting the root partition, the password
+        #    to build the challenge is also required (2FA).
+        ykfde_challenge=$(printf %s "$lvm_password" | sha256sum | awk '{print $1}')
+        sed -i "s/#YKFDE_CHALLENGE=\".*\"/YKFDE_CHALLENGE=\"$ykfde_challenge\"/g" /etc/ykfde.conf
+    fi
 }
 
 decrypt_lvm_partition() {
@@ -143,7 +155,7 @@ decrypt_yubikey_lvm_partition() {
 
     request_lvm_partition
     source /etc/ykfde.conf
-    if [ -z YKFDE_CHALLENGE ]; then
+    if [ -z "$YKFDE_CHALLENGE" ]; then
         request_lvm_password
         echo "${lvm_password}" | ykfde-open -d "/dev/${lvm_partition}" -n "${CRYPT_MAPPER_LVM}"
     else
