@@ -35,7 +35,7 @@ include-file = ~/.config/polybar/user_modules.ini
 
 ;; Bar Settings
 
-[bar/top]
+[bar/main]
 ; Use either of the following command to list available outputs:
 ; If unspecified, the application will pick the first one it finds.
 ; $ polybar -m | cut -d ':' -f 1
@@ -158,9 +158,9 @@ font-2 = Noto Sans:pixelsize=14;2
 ;cpu_bar memory_bar filesystem_bar mpd_bar 
 ;volume brightness battery_bar 
 
-modules-left = launcher workspaces2 cpu temperature memory
+modules-left = launcher workspaces2 cpu temperature memory updates
 modules-center = title
-modules-right = public-ip alsa battery backlight colors-switch network checknetwork updates date sysmenu
+modules-right = public-ip alsa backlight colors-switch battery wifi checknetwork date sysmenu
 
 ; The separator will be inserted between the output of each module
 separator =
@@ -321,13 +321,3 @@ format-offset =
 ; Enables pseudo-transparency for the bar
 ; If set to true the bar can be transparent without a compositor.
 pseudo-transparency = false
-
-;; _-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_
-;;	    __________  ______
-;;	   / ____/ __ \/ ____/
-;;	  / __/ / / / / /_    
-;;	 / /___/ /_/ / __/    
-;;	/_____/\____/_/       
-;;
-;; _-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_
-

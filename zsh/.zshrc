@@ -10,6 +10,7 @@ source $HOME/.zsh/alias.zsh
 source $HOME/.zsh/grep.zsh
 source $HOME/.zsh/transfer-sh.zsh
 source $HOME/.zsh/misc.zsh
+source $HOME/.zsh/gpg.zsh
 
 
 # Plugins

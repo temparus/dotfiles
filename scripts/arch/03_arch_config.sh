@@ -93,6 +93,11 @@ install_grub_bootloader() {
     fi
 }
 
+install_bluetooth() {
+    pacman --noconfirm -S bluez bluez-utils
+    systemctl enable bluetooth
+}
+
 create_admin_user() {
     echo "We create the first administrator user account now."
     read -p "Enter username: " username
@@ -156,6 +161,7 @@ configure_locales
 configure_hostname
 task "Rebuilding initramfs" rebuild_initramfs
 task "Installing grub bootloader" install_grub_bootloader
+task "Installing bluetooth packages" install_bluetooth
 configure_secure_boot
 install_yay
 create_admin_user

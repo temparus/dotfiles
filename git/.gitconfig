@@ -1,6 +1,6 @@
 [user]
 	email = code@temparus.ch
 	name = Sandro Lutz
-	signingkey = 00E63D128618B1E0
+	signingkey = 0x1E175D1979106B7E
 [commit]
 	gpgsign = true

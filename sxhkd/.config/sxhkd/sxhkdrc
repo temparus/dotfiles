@@ -158,8 +158,8 @@ ctrl + shift + Print
 	notify-send "Screenshot copied to clipboard"
 
 # Lock Desktop
-#super + shift + x
-#	lock
+super + shift + x
+	lock
 
 # Hibernate Desktop
 super + shift + z

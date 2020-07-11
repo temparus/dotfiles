@@ -39,13 +39,16 @@ install_x_server() {
 }
 
 install_bspwm_polybar_sxhkd_urxvt() {
-    sudo pacman --noconfirm -S bspwm sxhkd picom rofi rxvt-unicode \
+    sudo pacman --noconfirm -S bspwm sxhkd picom rofi rxvt-unicode xsecurelock xss-lock \
                                ttf-font-awesome noto-fonts
     yay -S polybar feh
     stow picom bspwm sxhkd polybar
 }
 
-
+install_yubico_pam() {
+    sudo pacman --noconfirm -S yubico-pam
+    # TODO: finish setup instructions!
+}
 
 echo "=================================="
 echo -e "Step 05: Install dotfiles\n"
@@ -60,4 +63,3 @@ task "Installing X server" install_x_server
 install_bspwm_polybar_sxhkd()
 
 cd $current_dir
-#task "Cleaning up temporary files" remove_arch_config_script

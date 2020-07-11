@@ -5,4 +5,4 @@ if ! [[ $EUID -ne 0 ]]; then
   exit 1
 fi
 
-i3lock -c 000000 -t -i /home/slu/pictures/lock.png
+xsecurelock &
