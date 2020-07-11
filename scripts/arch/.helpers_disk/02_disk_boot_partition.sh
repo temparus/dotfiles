@@ -24,9 +24,9 @@ request_new_boot_password() {
         if [[ $confirm == [nN] || $confirm == [nN][oO] ]]; then
             while [[ "$boot_password" != "$boot_password_repeated" ]]
             do
-                read -sp " > Enter password: " boot_password
+                read -rsp " > Enter password: " boot_password
                 echo ""
-                read -sp " > Repeat password: " boot_password_repeated
+                read -rsp " > Repeat password: " boot_password_repeated
                 echo ""
             done
         else
@@ -41,7 +41,7 @@ request_boot_password() {
         read -p "Do you use the same password as for the LVM partition [Y/n]: " confirm
 
         if [[ $confirm == [nN] || $confirm == [nN][oO] ]]; then
-            read -sp " > Enter password: " boot_password
+            read -rsp " > Enter password: " boot_password
             echo ""
         else
         	boot_password=${lvm_password}

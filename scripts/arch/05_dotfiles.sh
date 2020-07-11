@@ -23,7 +23,7 @@ configure_git() {
 }
 
 install_zsh() {
-    yay -S zsh zsh-completions thefuck
+    yay -S zsh zsh-completions thefuck ttf-hack
     # install zplug
     curl -sL --proto-redir -all,https https://raw.githubusercontent.com/zplug/installer/master/installer.zsh | zsh
     sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
@@ -33,12 +33,14 @@ install_zsh() {
 }
 
 install_x_server() {
+    # TODO: Some packages are missing to successfully start bspwm.
+    #       Need to find out which packages are missing here!
     sudo pacman --noconfirm -S xorg-server xorg-xinit xf86-input-libinput xf86-video-intel mesa
 }
 
 install_bspwm_polybar_sxhkd_urxvt() {
     sudo pacman --noconfirm -S bspwm sxhkd picom rofi rxvt-unicode \
-                               ttf-font-awesome noto-fonts ttf-hack
+                               ttf-font-awesome noto-fonts
     yay -S polybar feh
     stow picom bspwm sxhkd polybar
 }
@@ -51,9 +53,10 @@ echo -e "Step 05: Install dotfiles\n"
 current_dir=$(pwd)
 cd "${DIR}/../../"
 
-install_stow()
-configure_git()
+task "Installing package: stow" install_stow
+task "Configuring git" configure_git
 install_zsh()
+task "Installing X server" install_x_server
 install_bspwm_polybar_sxhkd()
 
 cd $current_dir

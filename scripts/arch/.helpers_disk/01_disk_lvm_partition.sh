@@ -17,7 +17,7 @@ install_yubikey_encryption_toolset() {
     # Install yubikey specific crypto software
     pacman --noconfirm -Sy yubikey-manager yubikey-personalization pcsc-tools libu2f-host make cryptsetup
     systemctl start pcscd.service
-    curl -L https://github.com/agherzan/yubikey-full-disk-encryption/archive/master.zip | bsdtar -xvf - -C .
+    curl -L https://github.com/temparus/yubikey-full-disk-encryption/archive/master.zip | bsdtar -xvf - -C .
     cd yubikey-full-disk-encryption-master
     make install
     cd ..
@@ -46,9 +46,9 @@ request_new_lvm_password() {
 
         while [[ "$lvm_password" != "$lvm_password_repeated" ]]
         do
-            read -sp " > Enter password: " lvm_password
+            read -rsp " > Enter password: " lvm_password
             echo ""
-            read -sp " > Repeat password: " lvm_password_repeated
+            read -rsp " > Repeat password: " lvm_password_repeated
             echo ""
         done
     fi
@@ -58,7 +58,7 @@ request_lvm_password() {
     if [ -z $lvm_password ]; then
         echo "For decrypting the LVM partition, a password is required."
 
-        read -sp " > Enter password: " lvm_password
+        read -rsp " > Enter password: " lvm_password
         echo ""
     fi
 }
@@ -99,8 +99,15 @@ create_encrypted_yubikey_lvm_partition() {
     printf "\n\n"
 
     # Add challenge to configuration file
-    ykfde_challenge=$(printf "$lvm_password" | sha256sum | awk '{print $1}')
-    sed -i "s/#YKFDE_CHALLENGE=\"/YKFDE_CHALLENGE=\"$ykfde_challenge/g" /etc/ykfde.conf
+    # This allows a hybrid approach for decrypting the root partition:
+    #  - When the boot partition is decrypted, the stored challenge
+    #    can be used to decrypt the root partition (1FA).
+    #    The password was already provided for unlocking the boot
+    #    partition (if the same passphrase is used only!)
+    #  - When directly decrypting the root partition, the password
+    #    to build the challenge is also required (2FA).
+    ykfde_challenge=$(printf %s "$lvm_password" | sha256sum | awk '{print $1}')
+    sed -i "s/#YKFDE_CHALLENGE=\".*\"/YKFDE_CHALLENGE=\"$ykfde_challenge\"/g" /etc/ykfde.conf
 
     # Create encrypted LVM partition with Yubikey as 2nd factor
     set -e
@@ -135,6 +142,11 @@ decrypt_yubikey_lvm_partition() {
     fi
 
     request_lvm_partition
-    request_lvm_password
-    echo "${lvm_password}" | ykfde-open -d "/dev/${lvm_partition}" -n "${CRYPT_MAPPER_LVM}"
+    source /etc/ykfde.conf
+    if [ -z YKFDE_CHALLENGE ]; then
+        request_lvm_password
+        echo "${lvm_password}" | ykfde-open -d "/dev/${lvm_partition}" -n "${CRYPT_MAPPER_LVM}"
+    else
+        ykfde-open -d "/dev/${lvm_partition}" -n "${CRYPT_MAPPER_LVM}"
+    fi
 }

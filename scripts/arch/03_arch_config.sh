@@ -21,7 +21,7 @@ install_encryption_toolset() {
     # Install yubikey specific crypto software
     pacman --noconfirm -Sy yubikey-manager yubikey-personalization pcsc-tools libu2f-host make cryptsetup
     systemctl start pcscd.service
-    curl -L https://github.com/agherzan/yubikey-full-disk-encryption/archive/master.zip | bsdtar -xvf - -C .
+    curl -L https://github.com/temparus/yubikey-full-disk-encryption/archive/master.zip | bsdtar -xvf - -C .
     cd yubikey-full-disk-encryption-master
     make install
     cd ..
@@ -65,7 +65,7 @@ configure_hostname() {
 
 rebuild_initramfs() {
     sed -i "s/MODULES=.*/MODULES=(ext4)/g" /etc/mkinitcpio.conf
-    sed -i "s/HOOKS=.*/HOOKS=(base udev autodetect modconf block keymap lvm2 filesystems fsck keyboard ykfde)/g" /etc/mkinitcpio.conf
+    sed -i "s/HOOKS=.*/HOOKS=(base udev autodetect modconf block keymap lvm2 filesystems fsck keyboard ykfde resume)/g" /etc/mkinitcpio.conf
     mkinitcpio -P
 }
 
