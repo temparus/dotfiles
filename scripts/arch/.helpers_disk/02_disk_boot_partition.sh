@@ -19,33 +19,41 @@ request_new_boot_password() {
         local boot_password_repeated="1"
 
         echo "For encrypting the boot partition, a password is required."
-        read -p "Do you want to use the same password as for the LVM partition [Y/n]: " confirm
 
-        if [[ $confirm == [nN] || $confirm == [nN][oO] ]]; then
-            while [[ "$boot_password" != "$boot_password_repeated" ]]
-            do
-                read -sp " > Enter password: " boot_password
-                echo ""
-                read -sp " > Repeat password: " boot_password_repeated
-                echo ""
-            done
-        else
-            boot_password=${lvm_password}
+        if [ ! -z "$lvm_password" ]; then
+            read -p " > Do you want to use the same password as for the LVM partition [Y/n]: " confirm
+
+            if [[ $confirm == [nN] || $confirm == [nN][oO] ]]; then
+                while [[ "$boot_password" != "$boot_password_repeated" ]]
+                do
+                    read -rsp " > Enter password: " boot_password
+                    echo ""
+                    read -rsp " > Repeat password: " boot_password_repeated
+                    echo ""
+                done
+                return
+            fi
         fi
+
+        boot_password=${lvm_password}
     fi
 }
 
 request_boot_password() {
     if [ -z $boot_password ]; then
         echo "For decrypting the boot partition, a password is required."
-        read -p "Do you use the same password as for the LVM partition [Y/n]: " confirm
 
-        if [[ $confirm == [nN] || $confirm == [nN][oO] ]]; then
-            read -sp " > Enter password: " boot_password
-            echo ""
-        else
-        	boot_password=${lvm_password}
+        if [ ! -z "$lvm_password" ]; then
+            read -p " > Do you use the same password as for the LVM partition [Y/n]: " confirm
+
+            if [[ $confirm == [nN] || $confirm == [nN][oO] ]]; then
+                read -rsp " > Enter password: " boot_password
+                echo ""
+                return
+            fi
         fi
+        
+        boot_password=${lvm_password}
     fi
 }
 

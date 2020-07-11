@@ -25,4 +25,3 @@ then
 else
     xrandr --output eDP1 --auto --output HDMI-1 --off --output DP-2 --off
 fi
-

@@ -142,24 +142,28 @@ super + ctrl + {Left,Right,Up,Down}
 
 # Screenshots
 Print
-	gnome-screenshot; \
+	gscreenshot; \
 	notify-send "Screenshot saved"
 
 ctrl + Print
-	gnome-screenshot -c; \
+	gscreenshot -c; \
 	notify-send "Screenshot copied to clipboard"
 
 shift + Print
-	gnome-screenshot -a; \
+	gscreenshot -s; \
 	notify-send "Screenshot saved"
 
 ctrl + shift + Print
-	gnome-screenshot -ac; \
+	gscreenshot -sc; \
 	notify-send "Screenshot copied to clipboard"
 
+# Launcher
+super + a
+	~/.config/polybar/scripts/launcher-alt
+
 # Lock Desktop
-#super + shift + x
-#	lock
+super + shift + x
+	lock
 
 # Hibernate Desktop
 super + shift + z

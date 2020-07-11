@@ -1,3 +1,0 @@
-#! /bin/sh
-
-exec --no-startup-id wmctrl -c Plasma

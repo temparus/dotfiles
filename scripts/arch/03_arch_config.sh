@@ -21,7 +21,7 @@ install_encryption_toolset() {
     # Install yubikey specific crypto software
     pacman --noconfirm -Sy yubikey-manager yubikey-personalization pcsc-tools libu2f-host make cryptsetup
     systemctl start pcscd.service
-    curl -L https://github.com/agherzan/yubikey-full-disk-encryption/archive/master.zip | bsdtar -xvf - -C .
+    curl -L https://github.com/temparus/yubikey-full-disk-encryption/archive/master.zip | bsdtar -xvf - -C .
     cd yubikey-full-disk-encryption-master
     make install
     cd ..
@@ -65,7 +65,7 @@ configure_hostname() {
 
 rebuild_initramfs() {
     sed -i "s/MODULES=.*/MODULES=(ext4)/g" /etc/mkinitcpio.conf
-    sed -i "s/HOOKS=.*/HOOKS=(base udev autodetect modconf block keymap lvm2 filesystems fsck keyboard ykfde)/g" /etc/mkinitcpio.conf
+    sed -i "s/HOOKS=.*/HOOKS=(base udev autodetect modconf block keymap lvm2 filesystems fsck keyboard ykfde resume)/g" /etc/mkinitcpio.conf
     mkinitcpio -P
 }
 
@@ -91,6 +91,11 @@ install_grub_bootloader() {
         sed -i "s/#YKFDE_LUKS_NAME=\".*\"/YKFDE_LUKS_NAME=\"cryptlvm\"/g" /etc/ykfde.conf
         sed -i "s/#YKFDE_DISK_UUID=\".*\"/YKFDE_DISK_UUID=\"${lvm_uuid}\"/g" /etc/ykfde.conf
     fi
+}
+
+install_bluetooth() {
+    pacman --noconfirm -S bluez bluez-utils
+    systemctl enable bluetooth
 }
 
 create_admin_user() {
@@ -156,6 +161,7 @@ configure_locales
 configure_hostname
 task "Rebuilding initramfs" rebuild_initramfs
 task "Installing grub bootloader" install_grub_bootloader
+task "Installing bluetooth packages" install_bluetooth
 configure_secure_boot
 install_yay
 create_admin_user

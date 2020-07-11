@@ -1,16 +1,11 @@
 #! /bin/sh
 
-# run plasma fixes before starting bspwm
-#if [ -x ~/.config/bspwm/plasmafixrc ]; then
-#    sh ~/.config/bspwm/plasmafixrc
-#fi
-
 sxhkd &
 
 # Cursor for the root window
 xsetroot -cursor_name left_ptr
 
-bspc monitor -d web term chat code music 6 7 
+bspc monitor -d web term chat code music 6 7 8
 
 bspc config border_width         3 
 bspc config window_gap           3
@@ -24,19 +19,16 @@ bspc desktop ^1 -l monocle
 bspc rule -a Gimp desktop=^8 state=floating follow=on
 bspc rule -a Chromium desktop=^1
 bspc rule -a vivaldi desktop=^1
-bspc rule -a Atom desktop=^4
+bspc rule -a Code desktop=^4
 bspc rule -a Genymotion desktop=^3
 bspc rule -a TelegramDesktop desktop=^3
 bspc rule -a Quassel IRC desktop=^3
 bspc rule -a Subl desktop=^4
 bspc rule -a Spotify desktop=^5
-bspc rule -a Lmms desktop=^5
-bspc rule -a mplayer2 state=floating
-bspc rule -a Gedit state=floating
 bspc rule -a Eog state=floating
-bspc rule -a Nautilus state=floating
+bspc rule -a Dolphin state=floating
 bspc rule -a File-roller state=floating
-bspc rule -a Gnome-system-monitor state=floating
+bspc rule -a gscreenshot state=floating
 
 bspc rule -a Kupfer.py focus=on
 bspc rule -a Screenkey manage=off
@@ -56,5 +48,13 @@ xrdb -merge ~/.Xdefaults
 # Configure wallpaper
 feh --bg-scale --no-fehbg ~/wallpaper.jpg
 
-#Start polybar
+# Start dunst notification service
+dunst &
+
+# Screen locker
+#  - lock screen after 2 minutes
+xset 30
+xss-lock xsecurelock -n
+
+# Start polybar
 bash ~/.config/polybar/launch.sh
