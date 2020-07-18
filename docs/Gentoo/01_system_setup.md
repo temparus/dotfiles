@@ -1,5 +1,8 @@
 # System Setup
 
+!!! warning "Not maintained!"
+    I do not use this gentoo setup anymore. It is very possible that some parts are out-of-date. If you face any issues, please take a look at the [Gentoo Wiki](https://wiki.gentoo.org).
+
 This is a general system setup guide for Gentoo.
 If you encounter any problems with this guide, see the [guide in the Gentoo Wiki](https://wiki.gentoo.org/wiki/Full_Disk_Encryption_From_Scratch_Simplified)
 
