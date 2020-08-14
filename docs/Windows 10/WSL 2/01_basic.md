@@ -8,7 +8,7 @@ The only thing how to make a Windows machine a usable workstation, is to have a 
 
 ## Preparations
 
-1. Enable WSL 2 on the Windows 10 operation system by following the [guide from Microsoft](https://docs.microsoft.com/en-us/windows/wsl/install-win10).
+1. Enable WSL 2 on the Windows 10 operating system by following the [guide from Microsoft](https://docs.microsoft.com/en-us/windows/wsl/install-win10).
 2. Install the desired Linux distribution from the Microsoft Store.
 3. Open the installed Linux distribution (opens a terminal) and clone this repository to the system.
 
@@ -94,7 +94,11 @@ Now we want to make the YubiKey available in the WSL2 environment:
    ```shell
    stow wsl2-gpg
    ```
-4. Restart your computer, open a terminal for your WSL2 environment and run `ssh-add -L`.<br/>
+4. Install `socat` in your WSL instance:
+   ```shell
+   sudo apt install socat
+   ```
+5. Restart your computer, open a terminal for your WSL2 environment and run `ssh-add -L`.<br/>
    If you see a key with the identifier starting with `cardno:`, the YubiKey Authentication Key is ready to be used for SSH connections within your WSL2 environment.
 
 !!! warning

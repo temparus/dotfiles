@@ -23,7 +23,6 @@ markdown_extensions:
   - markdown.extensions.tables:
   - markdown.extensions.abbr:
   - markdown.extensions.footnotes:
-  - pymdownx.extrarawhtml:
   - pymdownx.superfences:
       preserve_tabs: true
       custom_fences: 
