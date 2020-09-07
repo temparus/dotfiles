@@ -20,4 +20,4 @@ You can also build the static files for the documentation website using the foll
 docker run --rm -it -p 8000:8000 -v ${PWD}:/docs squidfunk/mkdocs-material build
 ```
 
-The generated files can be found in the directorz `${PWD}/site/`.
+The generated files can be found in the directory `${PWD}/site/`.
