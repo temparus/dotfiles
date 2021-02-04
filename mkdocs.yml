@@ -46,7 +46,7 @@ markdown_extensions:
           lang: pycon
           options:
             python3: true
-      linenums: true
+      linenums: false
   - pymdownx.inlinehilite:
       custom_inline:
         - name: math
