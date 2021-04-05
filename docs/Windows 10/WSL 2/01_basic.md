@@ -8,7 +8,7 @@ The only thing how to make a Windows machine a usable workstation, is to have a 
 
 ## Preparations
 
-1. Enable WSL 2 on the Windows 10 operation system by following the [guide from Microsoft](https://docs.microsoft.com/en-us/windows/wsl/install-win10).
+1. Enable WSL 2 on the Windows 10 operating system by following the [guide from Microsoft](https://docs.microsoft.com/en-us/windows/wsl/install-win10).
 2. Install the desired Linux distribution from the Microsoft Store.
 3. Open the installed Linux distribution (opens a terminal) and clone this repository to the system.
 
@@ -67,13 +67,11 @@ The YubiKey can be configured to store three different PGP keys to encrypt, sign
 !!! note
     This guide is based on the blog article [Yubikey, gpg, ssh and WSL2](https://blog.nimamoh.net/yubi-key-gpg-wsl2/) written by Nimamoh.
 
-This guide does not cover how to configure your YubiKey with PGP Keys. 
+!!! note
+    This guide does not cover how to configure your YubiKey with PGP Keys.
 
-1. Install [GPG4Win](https://www.gpg4win.org/).
-2. Open the application **Kleopatra**, open the menu **Tools** > **Manage Smartcards** and check if your YubiKey is recognized correctly. You may have to press F5 to refresh the view.
-3. Open the settings for Kleopatra and go to **GnuPG System**. Under the tab **Private Keys**, make sure that **Enable ssh support** and **Enable putty support** is checked.   
-4. Open a PowerShell and run `ssh-add -L`.<br/>
-   If you see a key with the identifier starting with `cardno:`, the YubiKey Authentication Key is ready to be used for SSH connections in Windows.
+First, follow the instructions on how to 
+[Configure YubiKey SmartCard for Windows](../../01_basics/#yubikey-smartcard).
 
 Now we want to make the YubiKey available in the WSL2 environment:
 
@@ -94,11 +92,18 @@ Now we want to make the YubiKey available in the WSL2 environment:
    ```shell
    stow wsl2-gpg
    ```
-4. Restart your computer, open a terminal for your WSL2 environment and run `ssh-add -L`.<br/>
+4. Install `socat` in your WSL instance:
+   ```shell
+   sudo apt install socat
+   ```
+5. Restart your computer, open a terminal for your WSL2 environment and run `ssh-add -L`.<br/>
    If you see a key with the identifier starting with `cardno:`, the YubiKey Authentication Key is ready to be used for SSH connections within your WSL2 environment.
 
 !!! warning
     Do not forget to import your public key if you want to sign your git commits!
+
+!!! tip
+    If the gpg-agent-relay cannot be started, you may have to start Kleopatra in Windows first.
 
 !!! tip
     If you are using multiple YubiKeys with the same keys, you must rescan for the correct serial number, before you can use the other device. Otherwise, the gpg agent will prompt you to connect the device with the correct serial number.<br/><br/>

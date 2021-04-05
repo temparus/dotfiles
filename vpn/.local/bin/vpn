@@ -4,10 +4,10 @@ case $1 in
     eth)
         case $2 in
             up)
-                nmcli con up id "ETH Zurich"
+                nmcli c up "ETH Zurich"
                 ;;
             down)
-                nmcli con down id "ETH Zurich"
+                nmcli c down "ETH Zurich"
                 ;;
             *)
                 echo "Command \"${2}\" for VPN provider \"${1}\" not configured!"
