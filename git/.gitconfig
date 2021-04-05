@@ -4,3 +4,15 @@
 	signingkey = 0x1E175D1979106B7E
 [commit]
 	gpgsign = true
+
+[includeIf "gitdir:EscapeEngineers/"]
+	path = .gitconfig-escapeengineers
+
+[includeIf "gitdir:amiv/"]
+	path = .gitconfig-amiv
+
+[includeIf "gitdir:bastli/"]
+	path = .gitconfig-bastli
+
+[includeIf "gitdir:vseth/"]
+	path = .gitconfig-vseth

@@ -41,7 +41,7 @@ fi
 zplug load 
 
 export EDITOR='vim'
-export PATH="$HOME/go/bin:$HOME/bin:$HOME/.local/bin:/usr/local/bin:$PATH"
+export PATH="$HOME/go/bin:$HOME/bin:$HOME/.local/bin:/usr/local/bin:$HOME/.yarn/bin:$PATH"
 
 if [[ -z $DISPLAY ]] && [[ $(tty) = /dev/tty1 ]]; then exec startx; fi
 
