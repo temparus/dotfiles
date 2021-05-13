@@ -1,0 +1,5 @@
+[user]
+	email = sandro@escapeengineers.ch
+	name = Sandro Lutz
+[commit]
+	gpgsign = false

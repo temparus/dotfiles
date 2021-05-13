@@ -4,6 +4,10 @@
 	signingkey = 0x1E175D1979106B7E
 [commit]
 	gpgsign = true
+[core]
+  autocrlf = true
+[gpg]
+  program = C:\\Program Files (x86)\\GnuPG\\bin\\gpg.exe
 [includeif "gitdir:~/projects/vseth/"]
   path = .gitignore-vseth
 [includeif "gitdir:~/projects/amiv/"]

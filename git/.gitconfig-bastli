@@ -1,0 +1,6 @@
+[user]
+	email = sandro@bastli.ethz.ch
+	name = Sandro Lutz
+	signingkey = 0x1E175D1979106B7E
+[commit]
+	gpgsign = true
