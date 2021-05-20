@@ -1,6 +1,6 @@
 [user]
 	email = sandro.lutz@amiv.ethz.ch
-	name = Sandro Lutz
-	signingkey = 0x1E175D1979106B7E
-[commit]
-	gpgsign = true
+#	name = Sandro Lutz
+#	signingkey = 0x1E175D1979106B7E
+#[commit]
+#	gpgsign = true

@@ -4,17 +4,18 @@
 	signingkey = 0x1E175D1979106B7E
 [commit]
 	gpgsign = true
-[core]
-  autocrlf = true
-[gpg]
-  program = C:\\Program Files (x86)\\GnuPG\\bin\\gpg.exe
-[includeif "gitdir:~/projects/vseth/"]
-  path = .gitignore-vseth
-[includeif "gitdir:~/projects/amiv/"]
-  path = .gitignore-amiv
-[includeif "gitdir:~/projects/bastli/"]
-  path = .gitignore-bastli
-[includeif "gitdir:~/projects/ETH/"]
-  path = .gitignore-eth
-[includeif "gitdir:~/projects/EscapeEngineers"]
-  path = .gitignore-escapeengineers
+#[core]
+#  autocrlf = true
+#[gpg]
+#  program = C:\\Program Files (x86)\\GnuPG\\bin\\gpg.exe
+[includeIf "gitdir/i:vseth/"]
+  path = ~/.gitconfig-vseth
+[includeIf "gitdir/i:amiv/"]
+  path = ~/.gitconfig-amiv
+[includeIf "gitdir/i:bastli/"]
+  path = ~/.gitconfig-bastli
+[includeIf "gitdir/i:ETH/"]
+  path = ~/.gitconfig-eth
+[includeIf "gitdir/i:EscapeEngineers/"]
+  path = ~/.gitconfig-escapeengineers
+
